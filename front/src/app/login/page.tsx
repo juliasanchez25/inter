@@ -45,7 +45,7 @@ export const Login = () => {
           <form onSubmit={handleSubmit(submit)}>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-2">
-                <Label htmlFor="email">E-mail</Label>
+                <Label htmlFor="email">E-mail*</Label>
                 <Input
                   id="email"
                   placeholder="exemplo@gmail.com"
@@ -55,7 +55,7 @@ export const Login = () => {
                 />
               </div>
               <div className="flex flex-col space-y-2">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password">Senha*</Label>
                 <Input
                   id="password"
                   placeholder="*******"

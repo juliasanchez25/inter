@@ -1,6 +1,6 @@
 'use client'
 
-import { ExitIcon } from '@radix-ui/react-icons'
+import { ExitIcon, HomeIcon, RocketIcon, GridIcon } from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback } from '../../ui/avatar'
 import {
   DropdownMenu,
@@ -9,14 +9,59 @@ import {
   DropdownMenuTrigger,
 } from '../../ui/dropdown-menu'
 import { Separator } from '../../ui/separator'
+import { Button } from '@/components/ui/button'
+import { useLocation, useNavigate } from 'react-router-dom'
+
+type Option = {
+  label: string
+  active?: boolean
+  icon: React.ReactNode
+  path: string
+}
 
 export const Sidebar = () => {
+  const navigate = useNavigate()
+  const { pathname } = useLocation()
+
+  const options: Array<Option> = [
+    {
+      label: 'Início',
+      active: pathname === '/',
+      icon: <HomeIcon />,
+      path: '/',
+    },
+    {
+      label: 'Reservas',
+      active: pathname.includes('/reserva'),
+      icon: <RocketIcon />,
+      path: '/reserva',
+    },
+    {
+      label: 'Dashboard',
+      active: pathname.includes('/dashboard'),
+      icon: <GridIcon />,
+      path: '/dashboard',
+    },
+  ]
+
   return (
     <div className="w-[200px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7">
       <div className="flex flex-col gap-5">
-        <div className="text-lg font-bold text-primary">logo</div>
+        <div className="text-md font-semibold text-primary">Reserva Rápida</div>
       </div>
-      <div className="flex flex-col gap-3 w-full"></div>
+      <div className="flex flex-col gap-3 w-full">
+        {options.map((option) => (
+          <Button
+            key={option.label}
+            variant={option.active ? 'sidebarActive' : 'ghost'}
+            className="flex items-center justify-start gap-4"
+            onClick={() => navigate(option.path)}
+          >
+            {option.icon}
+            {option.label}
+          </Button>
+        ))}
+      </div>
       <div className="flex flex-col gap-6 mt-auto">
         <Separator />
         <DropdownMenu>

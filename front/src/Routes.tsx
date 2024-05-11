@@ -3,11 +3,12 @@ import { Login } from './app/login/page'
 import { Cadastro } from './app/cadastro/page'
 import { Dashboard } from './app/dashboard/page'
 import { Reserva } from './app/reserva/page'
+import { Home } from './app/home/page'
 
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <div>Hello world!</div>,
+    element: <Home />,
   },
   {
     path: '/login',

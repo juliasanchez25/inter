@@ -5,7 +5,6 @@ import {
   Sheet,
   SheetClose,
   SheetContent,
-  SheetDescription,
   SheetFooter,
   SheetHeader,
   SheetTitle,
@@ -16,23 +15,38 @@ export const Modal = () => {
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline">Open</Button>
+        <Button variant="outline">Fazer reserva</Button>
       </SheetTrigger>
       <SheetContent>
         <SheetHeader>
-          <SheetTitle>Faça sua reserva</SheetTitle>
+          <SheetTitle className="mb-3">Faça sua reserva</SheetTitle>
         </SheetHeader>
         <div className="grid gap-4 py-4">
-          <div className="grid grid-cols-4 items-center gap-4">
-            <Label htmlFor="name" className="text-right">
-              Nome
-            </Label>
-            <Input id="name" value="Pedro Duarte" className="col-span-3" />
+          <div className="grid grid-cols-2 items-center gap-2">
+            <Label htmlFor="name">Nome</Label>
+            <Input id="name" type="text" className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-2 items-center gap-2">
+            <Label htmlFor="phone">Telefone</Label>
+            <Input id="phone" type="phone" className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-2 items-center gap-2">
+            <Label htmlFor="time">Horário</Label>
+            <Input id="time" className="col-span-3" />
+          </div>
+          <div className="grid grid-cols-2 items-center gap-2">
+            <Label htmlFor="peopleQuantity">Mesa para quantos?</Label>
+            <Input
+              id="peopleQuantity"
+              type="number"
+              max="20"
+              className="col-span-3"
+            />
           </div>
         </div>
         <SheetFooter>
           <SheetClose asChild>
-            <Button type="submit">Save changes</Button>
+            <Button type="submit">Salvar reserva</Button>
           </SheetClose>
         </SheetFooter>
       </SheetContent>
