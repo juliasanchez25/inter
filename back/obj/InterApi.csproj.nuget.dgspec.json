@@ -1,25 +1,28 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\2509j\\Documents\\Projetos\\inter\\back\\InterApi.csproj": {}
+    "C:\\Users\\alan_\\OneDrive - Fatec Centro Paula Souza\\FATEC\\4° Semestre\\Interdisciplinar\\inter\\back\\InterApi.csproj": {}
   },
   "projects": {
-    "C:\\Users\\2509j\\Documents\\Projetos\\inter\\back\\InterApi.csproj": {
+    "C:\\Users\\alan_\\OneDrive - Fatec Centro Paula Souza\\FATEC\\4° Semestre\\Interdisciplinar\\inter\\back\\InterApi.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\2509j\\Documents\\Projetos\\inter\\back\\InterApi.csproj",
+        "projectUniqueName": "C:\\Users\\alan_\\OneDrive - Fatec Centro Paula Souza\\FATEC\\4° Semestre\\Interdisciplinar\\inter\\back\\InterApi.csproj",
         "projectName": "InterApi",
-        "projectPath": "C:\\Users\\2509j\\Documents\\Projetos\\inter\\back\\InterApi.csproj",
-        "packagesPath": "C:\\Users\\2509j\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\2509j\\Documents\\Projetos\\inter\\back\\obj\\",
+        "projectPath": "C:\\Users\\alan_\\OneDrive - Fatec Centro Paula Souza\\FATEC\\4° Semestre\\Interdisciplinar\\inter\\back\\InterApi.csproj",
+        "packagesPath": "C:\\Users\\alan_\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\alan_\\OneDrive - Fatec Centro Paula Souza\\FATEC\\4° Semestre\\Interdisciplinar\\inter\\back\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\2509j\\AppData\\Roaming\\NuGet\\NuGet.Config"
+          "C:\\Users\\alan_\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "C:\\Program Files\\dotnet\\library-packs": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -43,6 +46,20 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
+            "Microsoft.EntityFrameworkCore.SqlServer": {
+              "target": "Package",
+              "version": "[8.0.6, )"
+            },
             "Swashbuckle.AspNetCore": {
               "target": "Package",
               "version": "[6.4.0, )"
@@ -67,7 +84,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.204/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.300/PortableRuntimeIdentifierGraph.json"
         }
       }
     }

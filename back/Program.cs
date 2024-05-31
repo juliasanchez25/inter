@@ -1,11 +1,25 @@
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using InterApi.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddDbContext<DatabaseContext>(options =>
+    options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new OpenApiInfo
+    {
+        Title = "Reserva Rápida API",
+        Description = "",
+        Version = "v1"
+    });
+});
 
 var app = builder.Build();
 
