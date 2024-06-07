@@ -12,46 +12,53 @@ import { DatePicker } from './components/datePicker'
 
 const clients = [
   {
-    client: 'INV001',
-    paymentStatus: 'Paid',
-    totalAmount: '$250.00',
-    paymentMethod: 'Credit Card',
+    client: 'John Doe',
+    contact: '(17) 98206-6123',
+    bookingDay: '2024-06-10',
+    bookingTime: '10:00',
+    quantity: '5',
   },
   {
-    client: 'INV002',
-    paymentStatus: 'Pending',
-    totalAmount: '$150.00',
-    paymentMethod: 'PayPal',
+    client: 'Jane Smith',
+    contact: '(17) 96206-2323',
+    bookingDay: '2024-06-11',
+    bookingTime: '14:00',
+    quantity: '3',
   },
   {
-    client: 'INV003',
-    paymentStatus: 'Unpaid',
-    totalAmount: '$350.00',
-    paymentMethod: 'Bank Transfer',
+    client: 'Michael Brown',
+    contact: '(17) 98266-8932',
+    bookingDay: '2024-06-12',
+    bookingTime: '09:00',
+    quantity: '4',
   },
   {
-    client: 'INV004',
-    paymentStatus: 'Paid',
-    totalAmount: '$450.00',
-    paymentMethod: 'Credit Card',
+    client: 'Emily Davis',
+    contact: '(17) 95206-5124',
+    bookingDay: '2024-06-13',
+    bookingTime: '11:30',
+    quantity: '2',
   },
   {
-    client: 'INV005',
-    paymentStatus: 'Paid',
-    totalAmount: '$550.00',
-    paymentMethod: 'PayPal',
+    client: 'Chris Wilson',
+    contact: '(17) 99212-0072',
+    bookingDay: '2024-06-14',
+    bookingTime: '15:00',
+    quantity: '6',
   },
   {
-    client: 'INV006',
-    paymentStatus: 'Pending',
-    totalAmount: '$200.00',
-    paymentMethod: 'Bank Transfer',
+    client: 'Jessica Lee',
+    contact: '(17) 92206-5432',
+    bookingDay: '2024-06-15',
+    bookingTime: '13:00',
+    quantity: '1',
   },
   {
-    client: 'INV007',
-    paymentStatus: 'Unpaid',
-    totalAmount: '$300.00',
-    paymentMethod: 'Credit Card',
+    client: 'Daniel Taylor',
+    contact: '(17) 97206-7123',
+    bookingDay: '2024-06-16',
+    bookingTime: '16:00',
+    quantity: '8',
   },
 ]
 
@@ -66,27 +73,29 @@ export function Dashboard() {
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Cliente</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Method</TableHead>
-            <TableHead className="text-right">Amount</TableHead>
+            <TableHead>Contato</TableHead>
+            <TableHead>Dia da reserva</TableHead>
+            <TableHead>Horário da reserva</TableHead>
+            <TableHead>Quantidade de pessoas</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
           {clients.map((client) => (
             <TableRow key={client.client}>
               <TableCell className="font-medium">{client.client}</TableCell>
-              <TableCell>{client.paymentStatus}</TableCell>
-              <TableCell>{client.paymentMethod}</TableCell>
-              <TableCell className="text-right">{client.totalAmount}</TableCell>
+              <TableCell>{client.contact}</TableCell>
+              <TableCell>{client.bookingDay}</TableCell>
+              <TableCell>{client.bookingTime}</TableCell>
+              <TableCell>{client.quantity}</TableCell>
             </TableRow>
           ))}
         </TableBody>
-        <TableFooter>
+        {/* <TableFooter>
           <TableRow>
             <TableCell colSpan={3}>Total</TableCell>
             <TableCell className="text-right">$2,500.00</TableCell>
           </TableRow>
-        </TableFooter>
+        </TableFooter> */}
       </Table>
     </PageLayout>
   )

@@ -17,32 +17,25 @@ export const Home = () => {
 
   return (
     <section style={gradientStyle} className="h-screen" onClick={handleClick}>
-      <div className="pt-32 flex flex-col items-center justify-center md:pt-12">
-        <h1 className="text-5xl italic font-semibold text-white md:text-7xl">
-          hellow
-        </h1>
-        <div className="mt-5 px-2 flex flex-col items-center gap-4 py-4 text-white text-center z-10">
-          <h2 className="text-2xl font-bold md:text-4xl">
-            Faça sua reserva de forma rápida
-          </h2>
-          <p className="text-md md:text-xl">
-            Descubra o sabor da vida em cada reserva, cada prato é uma jornada e
-            cada mesa uma história.
-          </p>
+      <div className="pt-32 flex flex-col items-center justify-center">
+        <div className="z-50 flex flex-col items-center">
+          <h1 className="text-5xl font-bold text-white md:text-7xl">
+            Reserva Rápida
+          </h1>
           <a href="/login">
-            <button className="w-48 h-10 p-2 flex items-center justify-center rounded-md border-solid border-2 border-white text-sm font-semibold cursor-pointer md:text-md">
-              Reserve aqui
+            <button className="mt-8 w-36 h-10 p-2 flex items-center justify-center rounded-md border-solid border-2 border-white text-sm text-white font-semibold cursor-pointer md:text-md z-90 hover:bg-white hover:text-black transition-colors delay-5">
+              Iniciar
             </button>
           </a>
         </div>
         <img
-          className={`absolute bottom-0 transition duration-500 ease-in-out transform ${showFirstImage ? 'opacity-100' : 'opacity-0'}`}
-          src={showFirstImage ? '/public/carousel-first-image.svg' : ''}
+          className={`z-0 absolute bottom-0 transition duration-500 ease-in-out transform ${showFirstImage ? 'opacity-100' : 'opacity-0'}`}
+          src={showFirstImage ? '/carousel-first-image.svg' : ''}
           alt=""
         />
         <img
-          className={`absolute bottom-0 transition duration-500 ease-in-out transform ${showFirstImage ? 'opacity-0' : 'opacity-100'}`}
-          src={showFirstImage ? '' : '/public/carousel-second-image.svg'}
+          className={`z-0 absolute bottom-0 transition duration-500 ease-in-out transform ${showFirstImage ? 'opacity-0' : 'opacity-100'}`}
+          src={showFirstImage ? '' : '/carousel-second-image.svg'}
           alt=""
         />
       </div>

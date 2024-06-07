@@ -13,7 +13,7 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 
-export function DatePicker() {
+export function BookingDatePicker() {
   const [date, setDate] = React.useState<Date>()
 
   return (
@@ -22,12 +22,12 @@ export function DatePicker() {
         <Button
           variant={'outline'}
           className={cn(
-            'w-1/6 justify-start text-left font-normal',
+            'w-[280px] justify-start text-left font-normal',
             !date && 'text-muted-foreground',
           )}
         >
           <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, 'PPP') : <span>Escolha o dia da reserva</span>}
+          {date ? format(date, 'PPP') : <span>Escolha um dia</span>}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

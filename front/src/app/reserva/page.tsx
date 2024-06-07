@@ -5,7 +5,7 @@ export const Reserva = () => {
   return (
     <PageLayout>
       <div className="flex justify-between">
-        <h2 className="text-xl font-semibold">Fazer reserva</h2>
+        <h2 className="text-xl font-semibold">Minhas reservas</h2>
         <Modal />
       </div>
     </PageLayout>

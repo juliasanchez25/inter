@@ -10,6 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
+import { BookingDatePicker } from './datePicker'
 
 export const Modal = () => {
   return (
@@ -30,9 +31,13 @@ export const Modal = () => {
             <Label htmlFor="phone">Telefone</Label>
             <Input id="phone" type="phone" className="col-span-3" />
           </div>
+          <div className="grid grid-cols-1 items-center gap-2">
+            <Label htmlFor="date">Dia</Label>
+            <BookingDatePicker />
+          </div>
           <div className="grid grid-cols-2 items-center gap-2">
             <Label htmlFor="time">Horário</Label>
-            <Input id="time" className="col-span-3" />
+            <Input id="time" type="time" className="col-span-3" />
           </div>
           <div className="grid grid-cols-2 items-center gap-2">
             <Label htmlFor="peopleQuantity">Mesa para quantos?</Label>
