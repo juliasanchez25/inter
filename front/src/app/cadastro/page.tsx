@@ -52,7 +52,7 @@ export const Cadastro = () => {
                 <Label htmlFor="name">Nome</Label>
                 <Input
                   id="name"
-                  placeholder="exemplo@gmail.com"
+                  placeholder="Zé da Silva"
                   type="text"
                   {...register('name')}
                   error={errors.name?.message}
@@ -63,7 +63,6 @@ export const Cadastro = () => {
                 <Input
                   id="email"
                   placeholder="exemplo@gmail.com"
-                  type="email"
                   {...register('email')}
                   error={errors.email?.message}
                 />

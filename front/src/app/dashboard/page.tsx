@@ -72,7 +72,7 @@ export function Dashboard() {
       <Table className="mt-10">
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Cliente</TableHead>
+            <TableHead>Cliente</TableHead>
             <TableHead>Contato</TableHead>
             <TableHead>Dia da reserva</TableHead>
             <TableHead>Horário da reserva</TableHead>

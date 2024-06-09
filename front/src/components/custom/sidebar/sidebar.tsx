@@ -1,6 +1,6 @@
 'use client'
 
-import { ExitIcon, HomeIcon, RocketIcon, GridIcon } from '@radix-ui/react-icons'
+import { ExitIcon, RocketIcon, GridIcon } from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback } from '../../ui/avatar'
 import {
   DropdownMenu,
@@ -25,10 +25,10 @@ export const Sidebar = () => {
 
   const options: Array<Option> = [
     {
-      label: 'Início',
-      active: pathname === '/',
-      icon: <HomeIcon />,
-      path: '/',
+      label: 'Dashboard',
+      active: pathname.includes('/dashboard'),
+      icon: <GridIcon />,
+      path: '/dashboard',
     },
     {
       label: 'Reservas',
@@ -36,16 +36,10 @@ export const Sidebar = () => {
       icon: <RocketIcon />,
       path: '/reserva',
     },
-    {
-      label: 'Dashboard',
-      active: pathname.includes('/dashboard'),
-      icon: <GridIcon />,
-      path: '/dashboard',
-    },
   ]
 
   return (
-    <div className="w-[200px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7">
+    <div className="w-[300px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7">
       <div className="flex flex-col gap-5">
         <div className="text-md font-semibold text-primary">Reserva Rápida</div>
       </div>

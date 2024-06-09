@@ -14,6 +14,7 @@ import { useForm } from 'react-hook-form'
 import { EnterIcon } from '@radix-ui/react-icons'
 import { loginSchema } from './validation'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useNavigate } from 'react-router-dom'
 
 type UserLoginFormData = {
   email: string
@@ -21,8 +22,11 @@ type UserLoginFormData = {
 }
 
 export const Login = () => {
+  const navigate = useNavigate()
+
   const submit = (values: UserLoginFormData) => {
     console.log('values', values)
+    navigate('/dashboard')
   }
 
   const {
@@ -49,7 +53,6 @@ export const Login = () => {
                 <Input
                   id="email"
                   placeholder="exemplo@gmail.com"
-                  type="email"
                   {...register('email')}
                   error={errors.email?.message}
                 />
