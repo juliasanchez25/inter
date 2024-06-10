@@ -1,9 +1,9 @@
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import { Login } from './app/login/page'
-import { Cadastro } from './app/cadastro/page'
-import { Dashboard } from './app/dashboard/page'
-import { Reserva } from './app/reserva/page'
-import { Home } from './app/home/page'
+import { Login } from './app/Login/page'
+import { Register } from './app/Register/page'
+import { Dashboard } from './app/Restaurant/Dashboard/page'
+import { Reservation } from './app/Client/Reservation/page'
+import { Home } from './app/Home/page'
 
 const router = createBrowserRouter([
   {
@@ -16,7 +16,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/cadastro',
-    element: <Cadastro />,
+    element: <Register />,
   },
   {
     path: '/dashboard',
@@ -24,7 +24,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/reserva',
-    element: <Reserva />,
+    element: <Reservation />,
   },
 ])
 

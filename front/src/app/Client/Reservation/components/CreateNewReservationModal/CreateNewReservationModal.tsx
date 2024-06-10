@@ -10,7 +10,7 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { ReservationDatePicker } from '../datePicker'
+import { ReservationDatePicker } from '../ReservationDatePicker'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { reservationModalSchema } from './validation'
@@ -23,7 +23,7 @@ type FormData = {
   peopleQuantity: string
 }
 
-export const ReservationModal = () => {
+export const CreateNewReservationModal = () => {
   const {
     register,
     handleSubmit,

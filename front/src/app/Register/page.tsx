@@ -22,7 +22,7 @@ type UserRegisterFormData = {
   confirmPassword: string
 }
 
-export const Cadastro = () => {
+export const Register = () => {
   const {
     register,
     handleSubmit,
