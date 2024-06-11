@@ -1,39 +1,40 @@
-using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
 using InterApi.Data;
+using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
-
-// Add services to the container.
-
-builder.Services.AddControllers();
-builder.Services.AddDbContext<DatabaseContext>(options =>
-    options.UseSqlServer("name=ConnectionStrings:DefaultConnection"));
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(c =>
+namespace InterApi
 {
-    c.SwaggerDoc("v1", new OpenApiInfo
+
+  internal class Program
+  {
+    public static void Main(string[] args)
     {
-        Title = "Reserva Rápida API",
-        Description = "",
-        Version = "v1"
-    });
-});
 
-var app = builder.Build();
+      var builder = WebApplication.CreateBuilder(args);
+      builder.Services.AddControllers();
+      builder.Services.AddEndpointsApiExplorer();
+      builder.Services.AddSwaggerGen();
+      builder.Services.AddCors(options =>
+      {
+        options.AddPolicy("CorsPolicy", builder => builder
+          .AllowAnyOrigin()
+          .AllowAnyMethod()
+          .AllowAnyHeader()
+        );
+      });
+      builder.Services.AddDbContextPool<DatabaseContext>(
+        options => options.UseNpgsql(builder.Configuration
+          .GetConnectionString("DataBase")
+        )
+      );
 
-// Configure the HTTP request pipeline.
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
+      var app = builder.Build();
+      app.UseSwagger();
+      app.UseSwaggerUI();
+      app.UseCors("CorsPolicy");
+      app.UseAuthorization();
+      app.MapControllers();
+      app.UseAuthorization();
+      app.Run();
+    }
+  }
 }
-
-app.UseHttpsRedirection();
-
-app.UseAuthorization();
-
-app.MapControllers();
-
-app.Run();
