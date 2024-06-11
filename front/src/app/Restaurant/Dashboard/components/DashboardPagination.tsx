@@ -8,7 +8,7 @@ import {
   PaginationPrevious,
 } from '@/components/ui/pagination'
 
-export function BookingsPagination() {
+export function DashboardPagination() {
   return (
     <Pagination>
       <PaginationContent>

@@ -2,7 +2,7 @@ import { transformPhoneToNumber } from '@/utils/masks'
 import { z } from 'zod'
 import { subDays } from 'date-fns'
 
-export const reservationModalSchema = z.object({
+export const editReservationModalSchema = z.object({
   phone: z
     .string()
     .min(1, 'Escolha um telefone')

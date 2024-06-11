@@ -9,23 +9,13 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { ReservationMenuDropdown } from './components/ReservationMenuDropdown'
-
-const bookings = [
-  {
-    booking: '1',
-    contact: '(17) 98206-6123',
-    bookingDay: '2024-06-10',
-    quantity: '5',
-  },
-  {
-    booking: '2',
-    contact: '(17) 96206-2323',
-    bookingDay: '2024-06-11',
-    quantity: '3',
-  },
-]
+import { useReadReservations } from '@/hooks/use-read-reservations'
+import { IReservation } from '@/models/reservation'
+import dayjs from 'dayjs'
 
 export const Reservation = () => {
+  const readReservations = useReadReservations<IReservation[]>()
+
   return (
     <PageLayout>
       <div className="flex justify-between">
@@ -41,18 +31,35 @@ export const Reservation = () => {
             <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
-          {bookings.map((booking) => (
-            <TableRow key={booking.booking}>
-              <TableCell className="font-medium">{booking.booking}</TableCell>
-              <TableCell>{booking.bookingDay}</TableCell>
-              <TableCell>{booking.quantity}</TableCell>
-              <TableCell>
-                <ReservationMenuDropdown />
+        {readReservations.isLoading && readReservations.isRefetching ? (
+          <TableBody>Carregando...</TableBody>
+        ) : (
+          <TableBody>
+            {readReservations.data?.map((reservation) => (
+              <TableRow key={reservation.id}>
+                <TableCell>{reservation.id}</TableCell>
+                <TableCell>
+                  {dayjs(reservation.day).format('DD/MM/YYYY')}
+                </TableCell>
+                <TableCell>{reservation.quantity}</TableCell>
+                <TableCell>
+                  <ReservationMenuDropdown reservation={reservation} />
+                </TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        )}
+        {readReservations.data?.length === 0 && (
+          <TableBody>
+            <TableRow>
+              <TableCell colSpan={4}>
+                <p className="text-muted-foreground">
+                  Nenhuma reserva encontrada :(
+                </p>
               </TableCell>
             </TableRow>
-          ))}
-        </TableBody>
+          </TableBody>
+        )}
       </Table>
     </PageLayout>
   )

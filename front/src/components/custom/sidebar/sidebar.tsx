@@ -1,6 +1,6 @@
 'use client'
 
-import { ExitIcon, RocketIcon, GridIcon } from '@radix-ui/react-icons'
+import { ExitIcon, RocketIcon, GridIcon, GearIcon } from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback } from '../../ui/avatar'
 import {
   DropdownMenu,
@@ -29,6 +29,12 @@ export const Sidebar = () => {
       active: pathname.includes('/dashboard'),
       icon: <GridIcon />,
       path: '/dashboard',
+    },
+    {
+      label: 'Configurações',
+      active: pathname.includes('/configuracoes'),
+      icon: <GearIcon />,
+      path: '/configuracoes',
     },
     {
       label: 'Reservas',

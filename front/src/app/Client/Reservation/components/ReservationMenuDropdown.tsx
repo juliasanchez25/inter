@@ -5,13 +5,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
-import {
-  DotsHorizontalIcon,
-  Pencil1Icon,
-  Cross1Icon,
-} from '@radix-ui/react-icons'
+import { DotsHorizontalIcon } from '@radix-ui/react-icons'
+import { EditReservation } from './EditReservationModal/EditReservation'
+import { DeleteReservation } from './DeleteReservationModal/DeleteReservation'
+import { IReservation } from '@/models/reservation'
 
-export function ReservationMenuDropdown() {
+type Props = {
+  reservation: IReservation
+}
+
+export function ReservationMenuDropdown({ reservation }: Props) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="cursor-pointer">
@@ -19,15 +22,21 @@ export function ReservationMenuDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56">
         <DropdownMenuGroup>
-          <DropdownMenuItem className="cursor-pointer">
-            <span className="flex items-center gap-1">
-              Editar <Pencil1Icon />
-            </span>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+          >
+            <EditReservation reservation={reservation} />
           </DropdownMenuItem>
-          <DropdownMenuItem className="cursor-pointer">
-            <span className="flex items-center gap-1 text-red-600">
-              Excluir <Cross1Icon />
-            </span>
+          <DropdownMenuItem
+            className="cursor-pointer"
+            onClick={(e) => {
+              e.preventDefault()
+            }}
+          >
+            <DeleteReservation id={reservation.id} />
           </DropdownMenuItem>
         </DropdownMenuGroup>
       </DropdownMenuContent>

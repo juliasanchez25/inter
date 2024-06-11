@@ -4,6 +4,7 @@ import { Register } from './app/Register/page'
 import { Dashboard } from './app/Restaurant/Dashboard/page'
 import { Reservation } from './app/Client/Reservation/page'
 import { Home } from './app/Home/page'
+import { RestaurantSettings } from './app/Restaurant/RestaurantSettings/page'
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
   {
     path: '/reserva',
     element: <Reservation />,
+  },
+  {
+    path: '/configuracoes',
+    element: <RestaurantSettings />,
   },
 ])
 

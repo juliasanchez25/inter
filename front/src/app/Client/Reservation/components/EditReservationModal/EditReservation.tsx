@@ -13,23 +13,41 @@ import {
 import { ReservationDatePicker } from '../ReservationDatePicker'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { reservationModalSchema } from './validation'
+import { editReservationModalSchema } from './validation'
 import { transformNumberToPhone } from '@/utils/masks'
-import { useCreateReservation } from '@/hooks/use-create-reservation'
-import { queryClient } from '@/main'
+import { Pencil1Icon } from '@radix-ui/react-icons'
+import { IReservation } from '@/models/reservation'
+import { useUpdateReservation } from '@/hooks/use-update-reservation'
 import { useState } from 'react'
+import { queryClient } from '@/main'
 import { toast } from '@/components/ui/use-toast'
-import { ReloadIcon } from '@radix-ui/react-icons'
 
 type FormData = {
   phone: string
   date: Date | undefined
-  time: string
   peopleQuantity: string
 }
 
-export const CreateNewReservationModal = () => {
+type Params = {
+  reservation: IReservation
+}
+
+export const EditReservation = ({ reservation }: Params) => {
   const [open, setOpen] = useState(false)
+
+  const updateReservation = useUpdateReservation({
+    onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['readReservations'],
+      })
+      setOpen(false)
+      toast({
+        description: 'Reserva editada com sucesso',
+        title: 'Sucesso',
+        className: 'bg-emerald-500 text-white',
+      })
+    },
+  })
 
   const {
     register,
@@ -38,34 +56,18 @@ export const CreateNewReservationModal = () => {
     setValue,
     getValues,
     trigger,
-    reset,
   } = useForm<FormData>({
-    resolver: zodResolver(reservationModalSchema),
+    resolver: zodResolver(editReservationModalSchema),
     defaultValues: {
-      phone: '',
-      date: new Date(),
-      time: '',
-      peopleQuantity: '1',
-    },
-  })
-
-  const createReservation = useCreateReservation({
-    onSuccess: () => {
-      reset()
-      queryClient.invalidateQueries({
-        queryKey: ['readReservations'],
-      })
-      setOpen(false)
-      toast({
-        description: 'Reserva efetuada com sucesso',
-        title: 'Sucesso',
-        className: 'bg-emerald-500 text-white',
-      })
+      phone: reservation.phone,
+      date: new Date(reservation.day),
+      peopleQuantity: reservation.quantity,
     },
   })
 
   const submit = (values: FormData) => {
-    createReservation.mutate({
+    updateReservation.mutate({
+      id: reservation.id,
       day: values.date?.toISOString() as string,
       quantity: values.peopleQuantity,
       phone: transformNumberToPhone(values.phone),
@@ -81,12 +83,14 @@ export const CreateNewReservationModal = () => {
       }}
     >
       <SheetTrigger asChild>
-        <Button>Fazer reserva</Button>
+        <div className="w-full flex gap-2 items-center">
+          Editar <Pencil1Icon />
+        </div>
       </SheetTrigger>
       <SheetContent className="md:max-w-[450px]">
         <form onSubmit={handleSubmit(submit)}>
           <SheetHeader>
-            <SheetTitle className="mb-3">Faça sua reserva</SheetTitle>
+            <SheetTitle className="mb-3">Editar reserva</SheetTitle>
           </SheetHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-2 items-center gap-2">
@@ -130,10 +134,12 @@ export const CreateNewReservationModal = () => {
             <SheetClose asChild>
               <Button variant="outline">Fechar</Button>
             </SheetClose>
-            <Button type="submit" disabled={createReservation.isPending}>
-              {createReservation.isPending && (
-                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
-              )}
+            <Button
+              type="submit"
+              onClick={(e) => {
+                handleSubmit(submit)(e)
+              }}
+            >
               Salvar reserva
             </Button>
           </SheetFooter>
