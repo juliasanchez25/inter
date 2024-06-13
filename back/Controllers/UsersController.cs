@@ -1,66 +1,78 @@
 using Microsoft.AspNetCore.Mvc;
 using InterApi.Models;
-using InterApi.Data;
 using InterApi.Entities;
+using InterApi.Data;
+using InterApi.Services;
 using Microsoft.EntityFrameworkCore;
-using System.Security.Claims;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.IdentityModel;
 
 namespace InterApi.Controllers
 {
   [ApiController]
   public class UsersController : ControllerBase
   {
-
     private readonly DatabaseContext _context;
+    private readonly IConfiguration _configuration;
+    private readonly AuthenticationService _authenticationService;
 
-    public UsersController(DatabaseContext context)
+    public UsersController(
+        DatabaseContext context,
+        IConfiguration configuration,
+        AuthenticationService authenticationService
+    )
     {
       _context = context;
+      _configuration = configuration;
+      _authenticationService = authenticationService;
     }
 
     [HttpPost]
     [Route("/users/login")]
-    public async Task<ActionResult<String>> Login(UserModel user)
+    public async Task<ActionResult<string>> Login(AuthenticateUserParams loginParams)
     {
-      UserModel? existentUser = await _context.User.FirstOrDefaultAsync(x => x.Email == user.Email);
+      UserModel? existentUser = await _context.User.FirstOrDefaultAsync(x => x.Email == loginParams.Email);
       if (existentUser == null)
       {
         return NotFound();
       }
-      if (user.Password != existentUser.Password) return Unauthorized();
 
-      UserTokenEntity token = BuildToken(user);
+      if (loginParams.Password != existentUser.Password)
+      {
+        return Unauthorized();
+      }
+      existentUser.Password = "";
+      string token = _authenticationService.CreateToken(existentUser);
       return new OkObjectResult(new
       {
-        token = token.Token,
+        token = token,
         user = existentUser
       });
     }
 
-    private UserTokenEntity BuildToken(AuthenticateUserParams user)
+    [HttpPost]
+    [Route("/users")]
+    public async Task<ActionResult<UserModel>> AddUser(UserModel user)
     {
-      var claims = new[]
+      UserModel? existentUser = await _context.User.FirstOrDefaultAsync(x => x.Email == user.Email);
+      if (existentUser != null)
       {
-        new Claim(JwtRegisteredClaimNames.UniqueName, user.Email),
-        new Claim("meuValor", "oque voce quiser"),
-        new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
-      };
-      SymmetricSecurityKey key = new(Encoding.UTF8.GetBytes(_configuration["JWT:key"]));
-      SigningCredentials signingCredentials = new(key, SecurityAlgorithms.HmacSha256);
-      DateTime expiration = DateTime.UtcNow.AddHours(1);
-      JwtSecurityToken token = new(
-        issuer: null,
-        audience: null,
-        claims: claims,
-        expires: expiration,
-        signingCredentials: signingCredentials
-      );
-      return new UserTokenEntity()
+        return BadRequest("User already exists");
+      }
+
+      _context.User.Add(user);
+      await _context.SaveChangesAsync();
+      return user;
+    }
+
+    [HttpGet]
+    [Route("/users/me/{token}")]
+    public async Task<ActionResult<UserModel?>> GetMe(string token)
+    {
+      int? userId = _authenticationService.GetUserIdByToken(token);
+      if (userId == null)
       {
-        Token = new JwtSecurityTokenHandler().WriteToken(token),
-      };
+        return NotFound();
+      }
+      return await _context.User.FirstOrDefaultAsync(x => x.Id == userId);
     }
   }
 }

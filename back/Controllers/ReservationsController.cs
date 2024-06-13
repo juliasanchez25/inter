@@ -5,16 +5,22 @@ namespace InterApi.Controllers
   using InterApi.Models;
   using InterApi.Data;
   using Microsoft.EntityFrameworkCore;
+  using InterApi.Services;
 
   [ApiController]
   public class ReservationsController : ControllerBase
   {
 
     private readonly DatabaseContext _context;
+    private readonly AuthenticationService _authenticationService;
 
-    public ReservationsController(DatabaseContext context)
+    public ReservationsController(
+      DatabaseContext context,
+      AuthenticationService authenticationService
+    )
     {
       _context = context;
+      _authenticationService = authenticationService;
     }
 
     [HttpGet]
@@ -57,6 +63,16 @@ namespace InterApi.Controllers
       reservation.UserId = request.UserId;
       await _context.SaveChangesAsync();
       return await _context.Reservation.ToListAsync();
+    }
+
+    private async Task<ActionResult<UserModel>> GetUserByToken(string token)
+    {
+      int? userId = _authenticationService.GetUserIdByToken(token);
+      if (userId == null)
+      {
+        return NotFound();
+      }
+      return await _context.User.FirstOrDefaultAsync(x => x.Id == userId);
     }
   }
 }
