@@ -120,10 +120,6 @@ export const Register = () => {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <a className="self-start text-sm underline" href="#">
-            Esqueci a senha
-          </a>
-
           <div className="self-start mt-4 text-sm">
             Já possui conta?{' '}
             <a className="underline" href="/login">

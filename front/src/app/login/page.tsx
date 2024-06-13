@@ -46,7 +46,9 @@ export const Login = () => {
         className: 'bg-emerald-500 text-white',
       })
       executeSetUser(response.user, response.token)
-      navigate(response.user.role === 'admin' ? '/dashboard' : '/reserva')
+      navigate(
+        response.user.role === 'admin' ? '/reservas' : '/minhas-reservas',
+      )
     },
     onError: () => {
       setError('email', {
@@ -105,9 +107,6 @@ export const Login = () => {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <a className="self-start text-sm underline" href="#">
-            Esqueci a senha
-          </a>
           <div className="self-start mt-4 text-sm">
             Ainda não possui conta?{' '}
             <a className="underline" href="/cadastro">

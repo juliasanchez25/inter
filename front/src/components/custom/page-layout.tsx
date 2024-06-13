@@ -1,7 +1,7 @@
 'use client'
 
 import { PropsWithChildren } from 'react'
-import { Sidebar } from './sidebar/sidebar'
+import { Sidebar } from './sidebar'
 
 type Props = PropsWithChildren
 

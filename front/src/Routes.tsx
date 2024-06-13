@@ -21,11 +21,11 @@ const router = createBrowserRouter([
     element: <Register />,
   },
   {
-    path: '/dashboard',
+    path: '/reservas',
     element: <Dashboard />,
   },
   {
-    path: '/reserva',
+    path: '/minhas-reservas',
     element: <Reservation />,
   },
   {

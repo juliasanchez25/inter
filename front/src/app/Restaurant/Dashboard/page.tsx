@@ -7,60 +7,69 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
+import { useReadReservations } from '@/hooks/use-read-reservations'
+import { IReservationForAdmin } from '@/models/reservation'
+import dayjs from 'dayjs'
 import { DashboardDatePicker } from './components/DashboardDatePicker'
-import { DashboardActionMenuDropdown } from './components/DashboardActionMenuDropdown'
+import { useState } from 'react'
+import { Separator } from '@/components/ui/separator'
+import isBetween from 'dayjs/plugin/isBetween'
 
-const clients = [
-  {
-    client: 'John Doe',
-    contact: '(17) 98206-6123',
-    bookingDay: '2024-06-10',
-    quantity: '5',
-  },
-  {
-    client: 'Jane Smith',
-    contact: '(17) 96206-2323',
-    bookingDay: '2024-06-11',
-    quantity: '3',
-  },
-  {
-    client: 'Michael Brown',
-    contact: '(17) 98266-8932',
-    bookingDay: '2024-06-12',
-    quantity: '4',
-  },
-  {
-    client: 'Emily Davis',
-    contact: '(17) 95206-5124',
-    bookingDay: '2024-06-13',
-    quantity: '2',
-  },
-  {
-    client: 'Chris Wilson',
-    contact: '(17) 99212-0072',
-    bookingDay: '2024-06-14',
-    quantity: '6',
-  },
-  {
-    client: 'Jessica Lee',
-    contact: '(17) 92206-5432',
-    bookingDay: '2024-06-15',
-    quantity: '1',
-  },
-  {
-    client: 'Daniel Taylor',
-    contact: '(17) 97206-7123',
-    bookingDay: '2024-06-16',
-    quantity: '8',
-  },
-]
+dayjs.extend(isBetween)
 
 export function Dashboard() {
+  const [startDate, setStartDate] = useState<Date | undefined>(new Date())
+  const [endDate, setEndDate] = useState<Date | undefined>(
+    dayjs().add(7, 'days').toDate(),
+  )
+
+  const readReservations = useReadReservations<IReservationForAdmin[]>()
+
+  const filterReservationByDate = (
+    reservations: IReservationForAdmin[] | undefined,
+  ) => {
+    if (!reservations) return []
+    if (!startDate || !endDate) return reservations
+    return reservations.filter(
+      (reservation) =>
+        dayjs(reservation.day).isBetween(startDate, endDate, 'day', '[]') ||
+        dayjs(reservation.day).isBetween(endDate, startDate, 'day', '[]'),
+    )
+  }
+
   return (
     <PageLayout>
-      <div className="flex justify-between">
+      <div className="flex flex-col">
         <h2 className="text-xl font-semibold">Reservas</h2>
-        <DashboardDatePicker />
+        <Separator className="mt-4 mb-4" />
+        <div className="flex gap-5 items-center">
+          <div>
+            <label className="block text-xs leading-6 text-gray-600">
+              Data inicial
+            </label>
+            <DashboardDatePicker
+              error={readReservations.error?.message}
+              value={startDate}
+              setValue={setStartDate}
+              disabled={{
+                after: endDate as Date,
+              }}
+            />
+          </div>
+          <div>
+            <label className="block text-xs leading-6 text-gray-600">
+              Data final
+            </label>
+            <DashboardDatePicker
+              error={readReservations.error?.message}
+              value={endDate}
+              setValue={setEndDate}
+              disabled={{
+                before: startDate as Date,
+              }}
+            />
+          </div>
+        </div>
       </div>
       <Table className="mt-10">
         <TableHeader>
@@ -69,28 +78,29 @@ export function Dashboard() {
             <TableHead>Contato</TableHead>
             <TableHead>Dia da reserva</TableHead>
             <TableHead>Quantidade de pessoas</TableHead>
-            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
-          {clients.map((client) => (
-            <TableRow key={client.client}>
-              <TableCell className="font-medium">{client.client}</TableCell>
-              <TableCell>{client.contact}</TableCell>
-              <TableCell>{client.bookingDay}</TableCell>
-              <TableCell>{client.quantity}</TableCell>
-              <TableCell>
-                <DashboardActionMenuDropdown />
-              </TableCell>
-            </TableRow>
-          ))}
+          {readReservations.data &&
+            filterReservationByDate(readReservations.data).map(
+              (reservation) => (
+                <TableRow key={reservation.id}>
+                  <TableCell className="font-medium">
+                    {reservation.userName}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {reservation.phone}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {dayjs(reservation.day).format('DD/MM/YYYY')}
+                  </TableCell>
+                  <TableCell className="font-medium">
+                    {reservation.quantity}
+                  </TableCell>
+                </TableRow>
+              ),
+            )}
         </TableBody>
-        {/* <TableFooter>
-          <TableRow>
-            <TableCell colSpan={3}>Total</TableCell>
-            <TableCell className="text-right">$2,500.00</TableCell>
-          </TableRow>
-        </TableFooter> */}
       </Table>
     </PageLayout>
   )

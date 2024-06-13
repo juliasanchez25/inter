@@ -1,8 +1,8 @@
 import { api } from '@/utils/api'
 import { useQuery } from '@tanstack/react-query'
 
-export function useReadConfiguration() {
-  return useQuery({
+export function useReadConfiguration<T>() {
+  return useQuery<T>({
     queryKey: ['readConfiguration'],
     queryFn: async () => {
       const response = await fetch(`${api}/restaurant/configuration`)

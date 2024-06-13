@@ -24,6 +24,7 @@ export type FormData = {
   phone?: string
   workingHours?: string
   website?: string
+  capacity?: number
 }
 
 export function RestaurantSettings() {
@@ -31,6 +32,7 @@ export function RestaurantSettings() {
   const [editPhone, setEditPhone] = useState(false)
   const [editWorkingHours, setEditWorkingHours] = useState(false)
   const [editWebsite, setEditWebsite] = useState(false)
+  const [editCapacity, setEditCapacity] = useState(false)
 
   const readConfiguration = useReadConfiguration()
   const configuration = readConfiguration.data?.[0] as IConfigurationModel
@@ -76,7 +78,7 @@ export function RestaurantSettings() {
       </div>
 
       {!readConfiguration.isLoading && (
-        <div className="flex gap-10 mt-10">
+        <div className="grid grid-cols-2 gap-10 mt-10">
           <DaysOpen
             setValue={setValue}
             submit={submit}
@@ -177,6 +179,7 @@ export function RestaurantSettings() {
                   <Input
                     disabled={!editPhone}
                     label="Telefone"
+                    maxLength={15}
                     placeholder={editPhone ? 'Preencha' : undefined}
                     defaultValue={transformNumberToPhone(
                       configuration?.phone || '',
@@ -233,6 +236,61 @@ export function RestaurantSettings() {
                         <button
                           onClick={() => {
                             setEditWebsite(false)
+                            submit()
+                          }}
+                        >
+                          <CheckIcon
+                            width={18}
+                            height={18}
+                            className="text-gray-600 hover:text-red-400"
+                          />
+                        </button>
+                      )
+                    }
+                  />
+                </div>
+              </CardContent>
+            </CardHeader>
+          </Card>
+
+          <Card>
+            <CardHeader>
+              <CardTitle className="flex justify-between">
+                Restaurante
+              </CardTitle>
+              <CardDescription>
+                Informações sobre o restaurante.
+              </CardDescription>
+              <CardContent className="p-0">
+                <div className="flex items-center gap-2 mt-4">
+                  <Input
+                    disabled={!editCapacity}
+                    label="Lugares disponíveis"
+                    placeholder={editCapacity ? 'Preencha' : undefined}
+                    defaultValue={configuration?.capacity}
+                    value={watch('capacity')}
+                    type="number"
+                    onChange={(e) => {
+                      setValue(
+                        'capacity',
+                        e.target.value === ''
+                          ? undefined
+                          : Number(e.target.value),
+                      )
+                    }}
+                    leading={
+                      !editCapacity ? (
+                        <button onClick={() => setEditCapacity(true)}>
+                          <Pencil1Icon
+                            width={18}
+                            height={18}
+                            className="text-gray-600 hover:text-red-400"
+                          />
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => {
+                            setEditCapacity(false)
                             submit()
                           }}
                         >

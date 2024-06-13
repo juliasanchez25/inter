@@ -10,16 +10,22 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { ReservationDatePicker } from '../ReservationDatePicker'
+import { ReservationDatePicker } from '../ReservationsDatePicker'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { reservationModalSchema } from './validation'
 import { transformNumberToPhone } from '@/utils/masks'
 import { useCreateReservation } from '@/hooks/use-create-reservation'
 import { queryClient } from '@/main'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { toast } from '@/components/ui/use-toast'
 import { ReloadIcon } from '@radix-ui/react-icons'
+import { useUser } from '@/context/user-context'
+import { useReadReservations } from '@/hooks/use-read-reservations'
+import { IConfigurationModel } from '@/models/configuration'
+import { IReservationForAdmin } from '@/models/reservation'
+import { useReadConfiguration } from '@/hooks/use-read-configuration'
+import dayjs from 'dayjs'
 
 type FormData = {
   phone: string
@@ -29,7 +35,9 @@ type FormData = {
 }
 
 export const CreateNewReservationModal = () => {
+  const [numberOfReservations, setNumberOfReservations] = useState(0)
   const [open, setOpen] = useState(false)
+  const { user } = useUser()
 
   const {
     register,
@@ -39,6 +47,7 @@ export const CreateNewReservationModal = () => {
     getValues,
     trigger,
     reset,
+    watch,
   } = useForm<FormData>({
     resolver: zodResolver(reservationModalSchema),
     defaultValues: {
@@ -52,6 +61,9 @@ export const CreateNewReservationModal = () => {
   const createReservation = useCreateReservation({
     onSuccess: () => {
       reset()
+      queryClient.invalidateQueries({
+        queryKey: ['readMyReservations'],
+      })
       queryClient.invalidateQueries({
         queryKey: ['readReservations'],
       })
@@ -69,9 +81,41 @@ export const CreateNewReservationModal = () => {
       day: values.date?.toISOString() as string,
       quantity: values.peopleQuantity,
       phone: transformNumberToPhone(values.phone),
-      userId: 1,
+      userId: user!.id,
     })
   }
+
+  const readConfiguration = useReadConfiguration<IConfigurationModel[]>()
+  const readReservations = useReadReservations<IReservationForAdmin[]>()
+  const totalReservationsAvailable = readConfiguration.data?.[0]?.capacity || 0
+
+  const chooseErrorForQuantity = () => {
+    if (numberOfReservations >= totalReservationsAvailable) {
+      return 'Nenhuma mesa disponível nessa data'
+    }
+    if (
+      totalReservationsAvailable - numberOfReservations <
+      Number(watch('peopleQuantity'))
+    ) {
+      return 'A quantidade de pessoas selecionada ultrapassa o limite de mesas disponíveis'
+    }
+    return null
+  }
+
+  useEffect(() => {
+    if (!readConfiguration.data) return
+    if (!readReservations.data) return
+    if (watch('date')) {
+      const reservationsOfDay = readReservations.data.filter((reservation) =>
+        dayjs(reservation.day).isSame(watch('date'), 'day'),
+      )
+      const quantitySum = reservationsOfDay.reduce(
+        (acc, reservation) => acc + reservation.quantity,
+        0,
+      )
+      setNumberOfReservations(quantitySum)
+    }
+  }, [readReservations.data, readConfiguration.data, watch('date')])
 
   return (
     <Sheet
@@ -111,6 +155,9 @@ export const CreateNewReservationModal = () => {
                   setValue('date', date)
                   trigger('date')
                 }}
+                disabled={{
+                  before: new Date(),
+                }}
                 error={errors.date?.message}
               />
             </div>
@@ -123,14 +170,23 @@ export const CreateNewReservationModal = () => {
                 className="col-span-3"
                 {...register('peopleQuantity')}
                 error={errors.peopleQuantity?.message}
+                disabled={numberOfReservations >= totalReservationsAvailable}
               />
             </div>
+            <p className="text-red-500 text-xs w-full">
+              {chooseErrorForQuantity()}
+            </p>
           </div>
           <SheetFooter>
             <SheetClose asChild>
               <Button variant="outline">Fechar</Button>
             </SheetClose>
-            <Button type="submit" disabled={createReservation.isPending}>
+            <Button
+              type="submit"
+              disabled={
+                createReservation.isPending || !!chooseErrorForQuantity()
+              }
+            >
               {createReservation.isPending && (
                 <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
               )}

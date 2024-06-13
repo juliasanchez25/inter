@@ -24,21 +24,21 @@ type Option = {
   active?: boolean
   icon: React.ReactNode
   path: string
-  admin?: boolean
+  role?: 'admin' | 'user'
 }
 
 export const Sidebar = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { user } = useUser()
+  const { user, clearUser } = useUser()
 
   const options: Array<Option> = [
     {
-      label: 'Dashboard',
-      active: pathname.includes('/dashboard'),
+      label: 'Reservas',
+      active: pathname.includes('/reservas'),
       icon: <GridIcon />,
-      path: '/dashboard',
-      admin: true,
+      path: '/reservas',
+      role: 'admin',
     },
     {
       label: 'Notificações',
@@ -51,19 +51,23 @@ export const Sidebar = () => {
       active: pathname.includes('/configuracoes'),
       icon: <GearIcon />,
       path: '/configuracoes',
-      admin: true,
+      role: 'admin',
     },
     {
-      label: 'Reservas',
-      active: pathname.includes('/reserva'),
+      label: 'Minhas reservas',
+      active: pathname.includes('/minhas-reservas'),
       icon: <RocketIcon />,
-      path: '/reserva',
+      path: '/minhas-reservas',
+      role: 'user',
     },
   ]
 
   const optionsByRole = options.filter((option) => {
-    if (option.admin) {
+    if (option.role === 'admin') {
       return user?.role === 'admin'
+    }
+    if (option.role === 'user') {
+      return user?.role === 'user'
     }
     return true
   })
@@ -88,27 +92,34 @@ export const Sidebar = () => {
       </div>
       <div className="flex flex-col gap-6 mt-auto">
         <Separator />
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <div className="flex items-center gap-3 cursor-pointer p-2">
-              <Avatar>
-                <AvatarFallback>J</AvatarFallback>
-              </Avatar>
-              <div className="flex flex-col max-w-[80%]">
-                <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
-                  {user!.name}
-                </p>
+        {user && (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <div className="flex items-center gap-3 cursor-pointer p-2">
+                <Avatar>
+                  <AvatarFallback>{user!.name[0]}</AvatarFallback>
+                </Avatar>
+                <div className="flex flex-col max-w-[80%]">
+                  <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
+                    {user!.name}
+                  </p>
+                </div>
               </div>
-            </div>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent className="w-[14vw]" align="center">
-            <DropdownMenuLabel className="flex">{user!.name}</DropdownMenuLabel>
-            <DropdownMenuLabel className="flex items-center gap-2 text-red-600 cursor-pointer hover:bg-red-100 rounded">
-              <ExitIcon />
-              Sair
-            </DropdownMenuLabel>
-          </DropdownMenuContent>
-        </DropdownMenu>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-[14vw]" align="center">
+              <DropdownMenuLabel className="flex">
+                {user!.name}
+              </DropdownMenuLabel>
+              <DropdownMenuLabel
+                onClick={() => clearUser()}
+                className="flex items-center gap-2 text-red-600 cursor-pointer hover:bg-red-100 rounded"
+              >
+                <ExitIcon />
+                Sair
+              </DropdownMenuLabel>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        )}
       </div>
     </div>
   )

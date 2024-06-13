@@ -12,14 +12,21 @@ import {
   PopoverTrigger,
 } from '@/components/ui/popover'
 import { ptBR } from 'date-fns/locale'
+import { Matcher } from 'react-day-picker'
 
 type Props = {
   error: string | undefined
   value: Date | undefined
   setValue: (value: Date | undefined) => void
+  disabled?: Matcher | Matcher[]
 }
 
-export function DashboardDatePicker({ error, value, setValue }: Props) {
+export function DashboardDatePicker({
+  error,
+  value,
+  setValue,
+  disabled,
+}: Props) {
   return (
     <Popover>
       <PopoverTrigger asChild>
@@ -51,6 +58,8 @@ export function DashboardDatePicker({ error, value, setValue }: Props) {
           selected={value}
           onSelect={setValue}
           initialFocus
+          disabled={disabled}
+          locale={ptBR}
         />
       </PopoverContent>
     </Popover>

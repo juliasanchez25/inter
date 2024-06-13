@@ -12,7 +12,7 @@ import {
 import { toast } from '@/components/ui/use-toast'
 import { useDeleteReservation } from '@/hooks/use-delete-reservation'
 import { queryClient } from '@/main'
-import { Cross1Icon } from '@radix-ui/react-icons'
+import { TrashIcon } from '@radix-ui/react-icons'
 import { useState } from 'react'
 
 type Props = {
@@ -24,6 +24,9 @@ export function DeleteReservation({ id }: Props) {
 
   const deleteReservation = useDeleteReservation({
     onSuccess: () => {
+      queryClient.invalidateQueries({
+        queryKey: ['readMyReservations'],
+      })
       queryClient.invalidateQueries({
         queryKey: ['readReservations'],
       })
@@ -44,8 +47,8 @@ export function DeleteReservation({ id }: Props) {
       }}
     >
       <AlertDialogTrigger asChild>
-        <div className="w-full flex gap-2 items-center text-primary">
-          Excluir <Cross1Icon />
+        <div className="w-full flex gap-2 items-center text-primary cursor-pointer">
+          <TrashIcon className="hover:text-red-500" />
         </div>
       </AlertDialogTrigger>
       <AlertDialogContent>

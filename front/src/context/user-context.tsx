@@ -25,7 +25,7 @@ const UserContext = createContext<{
 })
 
 export const UserProvider = ({ children }: PropsWithChildren) => {
-  const token = localStorage.getItem('token')
+  const token = sessionStorage.getItem('token')
 
   const readMe = useReadMe({
     token,
@@ -39,13 +39,13 @@ export const UserProvider = ({ children }: PropsWithChildren) => {
   }, [readMe.data])
 
   function executeSetUser(user: Omit<IUser, 'password'>, token: string) {
-    localStorage.setItem('token', token)
+    sessionStorage.setItem('token', token)
     setUser(user)
   }
 
   function clearUser() {
     setUser(undefined)
-    localStorage.removeItem('token')
+    sessionStorage.removeItem('token')
     window.location.href = '/'
   }
 

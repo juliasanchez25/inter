@@ -10,17 +10,21 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@/components/ui/sheet'
-import { ReservationDatePicker } from '../ReservationDatePicker'
+import { ReservationDatePicker } from '../ReservationsDatePicker'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { editReservationModalSchema } from './validation'
 import { transformNumberToPhone } from '@/utils/masks'
-import { Pencil1Icon } from '@radix-ui/react-icons'
-import { IReservation } from '@/models/reservation'
+import { Pencil1Icon, ReloadIcon } from '@radix-ui/react-icons'
+import { IReservation, IReservationForAdmin } from '@/models/reservation'
 import { useUpdateReservation } from '@/hooks/use-update-reservation'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { queryClient } from '@/main'
 import { toast } from '@/components/ui/use-toast'
+import { useReadConfiguration } from '@/hooks/use-read-configuration'
+import { useReadReservations } from '@/hooks/use-read-reservations'
+import dayjs from 'dayjs'
+import { IConfigurationModel } from '@/models/configuration'
 
 type FormData = {
   phone: string
@@ -34,7 +38,7 @@ type Params = {
 
 export const EditReservation = ({ reservation }: Params) => {
   const [open, setOpen] = useState(false)
-
+  const [numberOfReservations, setNumberOfReservations] = useState(0)
   const updateReservation = useUpdateReservation({
     onSuccess: () => {
       queryClient.invalidateQueries({
@@ -56,6 +60,7 @@ export const EditReservation = ({ reservation }: Params) => {
     setValue,
     getValues,
     trigger,
+    watch,
   } = useForm<FormData>({
     resolver: zodResolver(editReservationModalSchema),
     defaultValues: {
@@ -64,6 +69,25 @@ export const EditReservation = ({ reservation }: Params) => {
       peopleQuantity: reservation.quantity,
     },
   })
+
+  const readConfiguration = useReadConfiguration<IConfigurationModel[]>()
+  const readReservations = useReadReservations<IReservationForAdmin[]>()
+  const totalReservationsAvailable = readConfiguration.data?.[0]?.capacity || 0
+
+  useEffect(() => {
+    if (!readConfiguration.data) return
+    if (!readReservations.data) return
+    if (watch('date')) {
+      const reservationsOfDay = readReservations.data.filter((reservation) =>
+        dayjs(reservation.day).isSame(watch('date'), 'day'),
+      )
+      const quantitySum = reservationsOfDay.reduce(
+        (acc, reservation) => acc + reservation.quantity,
+        0,
+      )
+      setNumberOfReservations(quantitySum)
+    }
+  }, [readReservations.data, readConfiguration.data, watch('date')])
 
   const submit = (values: FormData) => {
     updateReservation.mutate({
@@ -75,6 +99,19 @@ export const EditReservation = ({ reservation }: Params) => {
     })
   }
 
+  const chooseErrorForQuantity = () => {
+    if (numberOfReservations >= totalReservationsAvailable) {
+      return 'Nenhuma mesa disponível nessa data'
+    }
+    if (
+      totalReservationsAvailable - numberOfReservations <
+      Number(watch('peopleQuantity'))
+    ) {
+      return 'A quantidade de pessoas selecionada ultrapassa o limite de mesas disponíveis'
+    }
+    return null
+  }
+
   return (
     <Sheet
       open={open}
@@ -83,8 +120,8 @@ export const EditReservation = ({ reservation }: Params) => {
       }}
     >
       <SheetTrigger asChild>
-        <div className="w-full flex gap-2 items-center">
-          Editar <Pencil1Icon />
+        <div className="w-full flex gap-2 items-center cursor-pointer">
+          <Pencil1Icon className="hover:text-blue-500" />
         </div>
       </SheetTrigger>
       <SheetContent className="md:max-w-[450px]">
@@ -115,6 +152,9 @@ export const EditReservation = ({ reservation }: Params) => {
                   setValue('date', date)
                   trigger('date')
                 }}
+                disabled={{
+                  before: new Date(),
+                }}
                 error={errors.date?.message}
               />
             </div>
@@ -127,8 +167,12 @@ export const EditReservation = ({ reservation }: Params) => {
                 className="col-span-3"
                 {...register('peopleQuantity')}
                 error={errors.peopleQuantity?.message}
+                disabled={numberOfReservations >= totalReservationsAvailable}
               />
             </div>
+            <p className="text-red-500 text-xs w-full">
+              {chooseErrorForQuantity()}
+            </p>
           </div>
           <SheetFooter>
             <SheetClose asChild>
@@ -139,7 +183,13 @@ export const EditReservation = ({ reservation }: Params) => {
               onClick={(e) => {
                 handleSubmit(submit)(e)
               }}
+              disabled={
+                updateReservation.isPending || !!chooseErrorForQuantity()
+              }
             >
+              {updateReservation.isPending && (
+                <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+              )}
               Salvar reserva
             </Button>
           </SheetFooter>

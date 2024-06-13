@@ -29,14 +29,14 @@ export function DaysOpen({ setValue, submit, defaultValue }: Props) {
   const [days, setDays] = useState<string[]>(defaultValue || [])
 
   return (
-    <Card className="w-fit">
+    <Card>
       <CardHeader>
         <CardTitle className="flex justify-between">Dias abertos</CardTitle>
         <CardDescription>
           Dias em que o restaurante estará aberto.
         </CardDescription>
         <CardContent className="p-0">
-          <div className="grid grid-cols-3 gap-2 mt-4 ">
+          <div className="grid grid-cols-3 gap-2 mt-4 w-fit">
             {daysOptions.map((day) => (
               <Badge
                 key={day}

@@ -1,5 +1,5 @@
 import { PageLayout } from '@/components/custom/page-layout'
-import { CreateNewReservationModal } from './components/CreateNewReservationModal/CreateNewReservationModal'
+import { CreateNewReservationModal } from './components/CreateNewReservationModal'
 import {
   Table,
   TableBody,
@@ -8,18 +8,43 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { ReservationMenuDropdown } from './components/ReservationMenuDropdown'
-import { useReadReservations } from '@/hooks/use-read-reservations'
 import { IReservation } from '@/models/reservation'
 import dayjs from 'dayjs'
+import { ReservationDatePicker } from './components/ReservationsDatePicker'
+import { useState } from 'react'
+import { useReadMyReservations } from '@/hooks/use-read-my-reservations'
+import { useUser } from '@/context/user-context'
+import { EditReservation } from './components/EditReservationModal'
+import { DeleteReservation } from './components/DeleteReservationModal'
 
 export const Reservation = () => {
-  const readReservations = useReadReservations<IReservation[]>()
+  const { user } = useUser()
+  const [date, setDate] = useState<Date | undefined>(new Date())
+  const readReservations = useReadMyReservations<IReservation[]>({
+    userId: user?.id as number,
+  })
+
+  const filterReservationByDate = (
+    reservations: IReservation[] | undefined,
+  ) => {
+    if (!reservations) return []
+    if (!date) return reservations
+    return reservations.filter((reservation) =>
+      dayjs(reservation.day).isSame(date, 'day'),
+    )
+  }
 
   return (
     <PageLayout>
       <div className="flex justify-between">
-        <h2 className="text-xl font-semibold">Minhas reservas</h2>
+        <div className="flex items-center gap-4">
+          <h2 className="text-xl font-semibold">Minhas reservas</h2>
+          <ReservationDatePicker
+            error={readReservations.error?.message}
+            value={date}
+            setValue={setDate}
+          />
+        </div>
         <CreateNewReservationModal />
       </div>
       <Table className="mt-10">
@@ -28,25 +53,31 @@ export const Reservation = () => {
             <TableHead>Reserva</TableHead>
             <TableHead>Dia da reserva</TableHead>
             <TableHead>Quantidade de pessoas</TableHead>
-            <TableHead>Ações</TableHead>
+            <TableHead>Editar</TableHead>
+            <TableHead>Excluir</TableHead>
           </TableRow>
         </TableHeader>
         {readReservations.isLoading && readReservations.isRefetching ? (
           <TableBody>Carregando...</TableBody>
         ) : (
           <TableBody>
-            {readReservations.data?.map((reservation) => (
-              <TableRow key={reservation.id}>
-                <TableCell>{reservation.id}</TableCell>
-                <TableCell>
-                  {dayjs(reservation.day).format('DD/MM/YYYY')}
-                </TableCell>
-                <TableCell>{reservation.quantity}</TableCell>
-                <TableCell>
-                  <ReservationMenuDropdown reservation={reservation} />
-                </TableCell>
-              </TableRow>
-            ))}
+            {filterReservationByDate(readReservations?.data).map(
+              (reservation) => (
+                <TableRow key={reservation.id}>
+                  <TableCell>{reservation.id}</TableCell>
+                  <TableCell>
+                    {dayjs(reservation.day).format('DD/MM/YYYY')}
+                  </TableCell>
+                  <TableCell>{reservation.quantity}</TableCell>
+                  <TableCell>
+                    <EditReservation reservation={reservation} />
+                  </TableCell>
+                  <TableCell>
+                    <DeleteReservation id={reservation.id} />
+                  </TableCell>
+                </TableRow>
+              ),
+            )}
           </TableBody>
         )}
         {readReservations.data?.length === 0 && (
