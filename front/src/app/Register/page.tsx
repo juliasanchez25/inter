@@ -13,7 +13,10 @@ import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { registerSchema } from './validation'
-import { PersonIcon } from '@radix-ui/react-icons'
+import { PersonIcon, ReloadIcon } from '@radix-ui/react-icons'
+import { useCreateUser } from '@/hooks/use-create-user'
+import { toast } from '@/components/ui/use-toast'
+import { useNavigate } from 'react-router-dom'
 
 type UserRegisterFormData = {
   name: string
@@ -23,6 +26,17 @@ type UserRegisterFormData = {
 }
 
 export const Register = () => {
+  const navigate = useNavigate()
+
+  const createUser = useCreateUser({
+    onSuccess: () => {
+      toast({
+        description: 'Conta criada com sucesso.',
+      })
+      navigate('/login')
+    },
+  })
+
   const {
     register,
     handleSubmit,
@@ -33,10 +47,13 @@ export const Register = () => {
   })
 
   const submit = handleSubmit((values) => {
-    console.log('values', values)
+    createUser.mutate({
+      email: values.email,
+      name: values.name,
+      password: values.password,
+      role: 'user',
+    })
   })
-
-  console.log(errors)
 
   return (
     <section className="w-screen h-screen flex justify-center items-center">
@@ -87,8 +104,16 @@ export const Register = () => {
                   error={errors.confirmPassword?.message}
                 />
               </div>
-              <Button type="submit" className="mt-3 w-full gap-2">
-                <PersonIcon />
+              <Button
+                type="submit"
+                className="mt-3 w-full gap-2"
+                disabled={createUser.isPending}
+              >
+                {createUser.isPending ? (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <PersonIcon />
+                )}
                 Cadastrar
               </Button>
             </div>

@@ -44,7 +44,7 @@ export function DeleteReservation({ id }: Props) {
       }}
     >
       <AlertDialogTrigger asChild>
-        <div className="w-full flex gap-2 items-center">
+        <div className="w-full flex gap-2 items-center text-primary">
           Excluir <Cross1Icon />
         </div>
       </AlertDialogTrigger>

@@ -1,21 +1,30 @@
-import { Button } from '@/components/ui/button'
-
 export const Navbar = () => {
   return (
-    <header className="w-full flex justify-between px-10 py-6 shadow-md">
-      <h2 className="self-center text-xl font-bold cursor-pointer">
-        Reserva Rápida
-      </h2>
-      <ul className="flex items-center gap-6">
-        <li>
-          <Button className="w-36">Entrar</Button>
-        </li>
-        <li>
-          <Button className="w-36" variant="outline">
-            Criar conta
-          </Button>
-        </li>
-      </ul>
+    <header className="px-4 lg:px-6 h-20 flex items-center bg-primary">
+      <a href="#" className="flex items-center justify-center">
+        <img
+          src="/images/logo.svg"
+          alt="Reserva Rápida"
+          width={90}
+          height={90}
+          className="mr-2"
+        />
+        <span className="sr-only">Reserva Rápida</span>
+      </a>
+      <nav className="ml-auto flex gap-4 sm:gap-6">
+        <a
+          href="#"
+          className="text-md text-white font-medium hover:underline underline-offset-4"
+        >
+          Fazer login
+        </a>
+        <a
+          href="#"
+          className="text-md text-white font-medium hover:underline underline-offset-4"
+        >
+          Cadastro
+        </a>
+      </nav>
     </header>
   )
 }

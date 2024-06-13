@@ -8,6 +8,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { DashboardDatePicker } from './components/DashboardDatePicker'
+import { DashboardActionMenuDropdown } from './components/DashboardActionMenuDropdown'
 
 const clients = [
   {
@@ -68,6 +69,7 @@ export function Dashboard() {
             <TableHead>Contato</TableHead>
             <TableHead>Dia da reserva</TableHead>
             <TableHead>Quantidade de pessoas</TableHead>
+            <TableHead>Ações</TableHead>
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -77,6 +79,9 @@ export function Dashboard() {
               <TableCell>{client.contact}</TableCell>
               <TableCell>{client.bookingDay}</TableCell>
               <TableCell>{client.quantity}</TableCell>
+              <TableCell>
+                <DashboardActionMenuDropdown />
+              </TableCell>
             </TableRow>
           ))}
         </TableBody>

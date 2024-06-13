@@ -11,10 +11,13 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useForm } from 'react-hook-form'
-import { EnterIcon } from '@radix-ui/react-icons'
+import { EnterIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { loginSchema } from './validation'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useNavigate } from 'react-router-dom'
+import { useLogin } from '@/hooks/use-login'
+import { toast } from '@/components/ui/use-toast'
+import { useUser } from '@/context/user-context'
 
 type UserLoginFormData = {
   email: string
@@ -23,20 +26,39 @@ type UserLoginFormData = {
 
 export const Login = () => {
   const navigate = useNavigate()
-
-  const submit = (values: UserLoginFormData) => {
-    console.log('values', values)
-    navigate('/dashboard')
-  }
+  const { executeSetUser } = useUser()
 
   const {
     register,
     handleSubmit,
     formState: { errors },
+    setError,
   } = useForm<UserLoginFormData>({
     resolver: zodResolver(loginSchema),
     mode: 'all',
   })
+
+  const login = useLogin({
+    onSuccess: (response) => {
+      toast({
+        description: 'Login realizado com sucesso',
+        title: 'Sucesso',
+        className: 'bg-emerald-500 text-white',
+      })
+      executeSetUser(response.user, response.token)
+      navigate(response.user.role === 'admin' ? '/dashboard' : '/reserva')
+    },
+    onError: () => {
+      setError('email', {
+        type: 'custom',
+        message: 'Email ou senha inválidos',
+      })
+    },
+  })
+
+  const submit = (values: UserLoginFormData) => {
+    login.mutate(values)
+  }
 
   return (
     <section className="w-screen h-screen flex justify-center items-center">
@@ -67,8 +89,16 @@ export const Login = () => {
                   error={errors.password?.message}
                 />
               </div>
-              <Button type="submit" className="mt-3 w-full gap-2">
-                <EnterIcon />
+              <Button
+                type="submit"
+                className="mt-3 w-full gap-2"
+                disabled={login.isPending}
+              >
+                {login.isPending ? (
+                  <ReloadIcon className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  <EnterIcon />
+                )}
                 Entrar
               </Button>
             </div>

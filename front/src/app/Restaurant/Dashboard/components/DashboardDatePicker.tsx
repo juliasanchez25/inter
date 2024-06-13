@@ -1,6 +1,5 @@
 'use client'
 
-import * as React from 'react'
 import { format } from 'date-fns'
 import { CalendarIcon } from '@radix-ui/react-icons'
 
@@ -12,29 +11,45 @@ import {
   PopoverContent,
   PopoverTrigger,
 } from '@/components/ui/popover'
+import { ptBR } from 'date-fns/locale'
 
-export function DashboardDatePicker() {
-  const [date, setDate] = React.useState<Date>()
+type Props = {
+  error: string | undefined
+  value: Date | undefined
+  setValue: (value: Date | undefined) => void
+}
 
+export function DashboardDatePicker({ error, value, setValue }: Props) {
   return (
     <Popover>
       <PopoverTrigger asChild>
-        <Button
-          variant={'outline'}
-          className={cn(
-            'w-1/6 justify-start text-left font-normal',
-            !date && 'text-muted-foreground',
-          )}
-        >
-          <CalendarIcon className="mr-2 h-4 w-4" />
-          {date ? format(date, 'PPP') : <span>Escolha o dia da reserva</span>}
-        </Button>
+        <div className="flex flex-col">
+          <Button
+            type="button"
+            variant={'outline'}
+            className={cn(
+              'justify-start text-left font-normal',
+              !value && 'text-muted-foreground',
+              error && 'border-red-600',
+            )}
+          >
+            <CalendarIcon className="mr-2 h-4 w-4" />
+            {value ? (
+              format(value, 'PPP', {
+                locale: ptBR,
+              })
+            ) : (
+              <span>Filtrar por data</span>
+            )}
+          </Button>
+          {error && <p className="text-sm text-red-600 mt-2">{error}</p>}
+        </div>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <Calendar
           mode="single"
-          selected={date}
-          onSelect={setDate}
+          selected={value}
+          onSelect={setValue}
           initialFocus
         />
       </PopoverContent>

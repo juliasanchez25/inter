@@ -1,6 +1,12 @@
 'use client'
 
-import { ExitIcon, RocketIcon, GridIcon, GearIcon } from '@radix-ui/react-icons'
+import {
+  ExitIcon,
+  RocketIcon,
+  GridIcon,
+  GearIcon,
+  BellIcon,
+} from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback } from '../../ui/avatar'
 import {
   DropdownMenu,
@@ -11,17 +17,20 @@ import {
 import { Separator } from '../../ui/separator'
 import { Button } from '@/components/ui/button'
 import { useLocation, useNavigate } from 'react-router-dom'
+import { useUser } from '@/context/user-context'
 
 type Option = {
   label: string
   active?: boolean
   icon: React.ReactNode
   path: string
+  admin?: boolean
 }
 
 export const Sidebar = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { user } = useUser()
 
   const options: Array<Option> = [
     {
@@ -29,12 +38,20 @@ export const Sidebar = () => {
       active: pathname.includes('/dashboard'),
       icon: <GridIcon />,
       path: '/dashboard',
+      admin: true,
+    },
+    {
+      label: 'Notificações',
+      active: pathname.includes('/notificacoes'),
+      icon: <BellIcon />,
+      path: '/notificacoes',
     },
     {
       label: 'Configurações',
       active: pathname.includes('/configuracoes'),
       icon: <GearIcon />,
       path: '/configuracoes',
+      admin: true,
     },
     {
       label: 'Reservas',
@@ -44,13 +61,20 @@ export const Sidebar = () => {
     },
   ]
 
+  const optionsByRole = options.filter((option) => {
+    if (option.admin) {
+      return user?.role === 'admin'
+    }
+    return true
+  })
+
   return (
     <div className="w-[300px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7">
       <div className="flex flex-col gap-5">
         <div className="text-md font-semibold text-primary">Reserva Rápida</div>
       </div>
       <div className="flex flex-col gap-3 w-full">
-        {options.map((option) => (
+        {optionsByRole.map((option) => (
           <Button
             key={option.label}
             variant={option.active ? 'sidebarActive' : 'ghost'}
@@ -72,14 +96,14 @@ export const Sidebar = () => {
               </Avatar>
               <div className="flex flex-col max-w-[80%]">
                 <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
-                  Julia
+                  {user!.name}
                 </p>
               </div>
             </div>
           </DropdownMenuTrigger>
           <DropdownMenuContent className="w-[14vw]" align="center">
-            <DropdownMenuLabel className="flex">Meu perfil</DropdownMenuLabel>
-            <DropdownMenuLabel className="flex items-center gap-2 text-red-600">
+            <DropdownMenuLabel className="flex">{user!.name}</DropdownMenuLabel>
+            <DropdownMenuLabel className="flex items-center gap-2 text-red-600 cursor-pointer hover:bg-red-100 rounded">
               <ExitIcon />
               Sair
             </DropdownMenuLabel>
