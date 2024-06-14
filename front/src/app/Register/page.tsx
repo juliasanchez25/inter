@@ -17,6 +17,7 @@ import { PersonIcon, ReloadIcon } from '@radix-ui/react-icons'
 import { useCreateUser } from '@/hooks/use-create-user'
 import { toast } from '@/components/ui/use-toast'
 import { useNavigate } from 'react-router-dom'
+import React from 'react'
 
 type UserRegisterFormData = {
   name: string
@@ -27,6 +28,10 @@ type UserRegisterFormData = {
 
 export const Register = () => {
   const navigate = useNavigate()
+
+  React.useEffect(() => {
+    document.title = 'Cadastro'
+  }, [])
 
   const createUser = useCreateUser({
     onSuccess: () => {

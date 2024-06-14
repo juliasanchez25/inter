@@ -12,4 +12,5 @@ public class DatabaseContext : DbContext
   public DbSet<ReservationModel> Reservation { get; set; }
   public DbSet<RestaurantModel> Restaurant { get; set; }
   public DbSet<UserModel> User { get; set; }
+  public DbSet<NotificationModel> Notification { get; set; }
 }

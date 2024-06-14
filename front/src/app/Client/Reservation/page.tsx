@@ -10,7 +10,7 @@ import {
 import { IReservation } from '@/models/reservation'
 import dayjs from 'dayjs'
 import { ReservationDatePicker } from './components/ReservationsDatePicker'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { useReadMyReservations } from '@/hooks/use-read-my-reservations'
 import { useUser } from '@/context/user-context'
 import { DeleteReservation } from './components/DeleteReservationModal'
@@ -22,6 +22,10 @@ export const Reservation = () => {
   const readReservations = useReadMyReservations<IReservation[]>({
     userId: user?.id as number,
   })
+
+  React.useEffect(() => {
+    document.title = 'Minhas reservas'
+  }, [])
 
   const filterReservationByDate = (
     reservations: IReservation[] | undefined,

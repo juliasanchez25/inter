@@ -9,10 +9,15 @@ import {
   ReloadIcon,
   StopwatchIcon,
 } from '@radix-ui/react-icons'
+import React from 'react'
 
 export function InformationPage() {
   const readConfiguration = useReadConfiguration<IConfigurationModel[]>()
   const configuration = readConfiguration.data?.[0]
+
+  React.useEffect(() => {
+    document.title = 'Informações do restaurante'
+  }, [])
 
   function normalizeStringForGoogleMaps(input?: string): string {
     if (!input) return ''
@@ -59,8 +64,18 @@ export function InformationPage() {
             </div>
             <div className="flex gap-3 items-center">
               <DesktopIcon className="text-primary" />
-              <p className="text-base text-gray-700">
-                Website: {configuration.website}
+              <p className="text-base text-gray-700 flex items-center gap-2">
+                Website:{' '}
+                <a
+                  href={`${configuration.website}`}
+                  className="underline text-red-400 flex items-center gap-2"
+                  target="_blank"
+                  rel="noreferrer"
+                  title="Abrir no Google Maps"
+                >
+                  {configuration.website}
+                  <ArrowTopRightIcon />
+                </a>
               </p>
             </div>
             <div className="flex gap-3 items-center">

@@ -6,19 +6,6 @@ export const Home = () => {
   React.useEffect(() => {
     document.title = 'Início'
   }, [])
-  // const [showFirstImage, setShowFirstImage] = useState(true)
-  // const [gradientColors, setGradientColors] = useState(['#F0B25B', '#FF9500'])
-
-  // const handleClick = () => {
-  //   setShowFirstImage(!showFirstImage)
-  //   setGradientColors(
-  //     showFirstImage ? ['#F06235', '#CA0D01'] : ['#F0B25B', '#FF9500'],
-  //   )
-  // }
-
-  // const gradientStyle = {
-  //   backgroundImage: `linear-gradient(to bottom, ${gradientColors[0]}, ${gradientColors[1]})`,
-  // }
 
   return (
     <>

@@ -11,7 +11,7 @@ import { useReadReservations } from '@/hooks/use-read-reservations'
 import { IReservationForAdmin } from '@/models/reservation'
 import dayjs from 'dayjs'
 import { DashboardDatePicker } from './components/DashboardDatePicker'
-import { useState } from 'react'
+import React, { useState } from 'react'
 import { Separator } from '@/components/ui/separator'
 import isBetween from 'dayjs/plugin/isBetween'
 
@@ -23,6 +23,10 @@ export function Dashboard() {
     dayjs().add(7, 'days').toDate(),
   )
 
+  React.useEffect(() => {
+    document.title = 'Reservas'
+  }, [])
+
   const readReservations = useReadReservations<IReservationForAdmin[]>()
 
   const filterReservationByDate = (
@@ -30,11 +34,13 @@ export function Dashboard() {
   ) => {
     if (!reservations) return []
     if (!startDate || !endDate) return reservations
-    return reservations.filter(
-      (reservation) =>
-        dayjs(reservation.day).isBetween(startDate, endDate, 'day', '[]') ||
-        dayjs(reservation.day).isBetween(endDate, startDate, 'day', '[]'),
-    )
+    return reservations
+      .filter(
+        (reservation) =>
+          dayjs(reservation.day).isBetween(startDate, endDate, 'day', '[]') ||
+          dayjs(reservation.day).isBetween(endDate, startDate, 'day', '[]'),
+      )
+      .sort((a, b) => new Date(a.day).getTime() - new Date(b.day).getTime())
   }
 
   return (

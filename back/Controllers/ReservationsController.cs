@@ -58,6 +58,16 @@ namespace InterApi.Controllers
     {
       _context.Reservation.Add(reservation);
       await _context.SaveChangesAsync();
+      await _context.Reservation.ToListAsync();
+
+      _context.Notification.Add(new NotificationModel
+      {
+        Message = "Reserva criada para " + reservation.Quantity + " pessoa(s), no dia " + FormatIsoStringToDateTime(reservation.Day),
+        Title = "Nova reserva criada!",
+        IsRead = false,
+        CreatedAt = DateTime.UtcNow
+      });
+      await _context.SaveChangesAsync();
       return await _context.Reservation.ToListAsync();
     }
 
@@ -70,6 +80,16 @@ namespace InterApi.Controllers
         return NotFound();
       _context.Reservation.Remove(reservation);
       await _context.SaveChangesAsync();
+
+      _context.Notification.Add(new NotificationModel
+      {
+        Message = "Reserva de " + reservation.Quantity + " pessoa(s) cancelada, no dia " + FormatIsoStringToDateTime(reservation.Day),
+        Title = "Reserva número " + id + " cancelada!",
+        IsRead = false,
+        CreatedAt = DateTime.UtcNow
+      });
+      await _context.SaveChangesAsync();
+
       return await _context.Reservation.ToListAsync();
     }
 
@@ -95,6 +115,14 @@ namespace InterApi.Controllers
         return NotFound();
       }
       return await _context.User.FirstOrDefaultAsync(x => x.Id == userId);
+    }
+
+    public static DateTime FormatIsoStringToDateTime(string isoDateString)
+    {
+      DateTimeOffset dateTimeOffset = DateTimeOffset.Parse(isoDateString, null, System.Globalization.DateTimeStyles.RoundtripKind);
+      TimeSpan utcOffset = TimeSpan.FromHours(-3);
+      DateTimeOffset adjustedDateTimeOffset = dateTimeOffset.ToOffset(utcOffset);
+      return adjustedDateTimeOffset.Date;
     }
   }
 }

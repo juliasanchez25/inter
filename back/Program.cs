@@ -6,6 +6,8 @@ using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Swagger;
 using Microsoft.OpenApi.Models;
 using InterApi.Services;
+using InterApi.Hubs;
+using Microsoft.AspNetCore.Http.Connections;
 
 namespace InterApi
 {
@@ -27,6 +29,7 @@ namespace InterApi
           .AllowAnyHeader()
         );
       });
+      builder.Services.AddSignalR();
       builder.Services.AddDbContextPool<DatabaseContext>(
         options => options.UseNpgsql(builder.Configuration
           .GetConnectionString("DataBase")
@@ -94,6 +97,13 @@ namespace InterApi
       }
       app.UseHttpsRedirection();
       app.UseRouting();
+      app.UseEndpoints(endpoints =>
+      {
+        endpoints.MapHub<ReservationsHub>("/reservationsHub", options =>
+          {
+            options.Transports = HttpTransportType.WebSockets;
+          });
+      });
       app.Run();
     }
   }

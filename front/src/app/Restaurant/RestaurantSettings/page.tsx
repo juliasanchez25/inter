@@ -9,7 +9,7 @@ import {
 } from '@/components/ui/card'
 import { CheckIcon, Pencil1Icon } from '@radix-ui/react-icons'
 import { Input } from '@/components/ui/input'
-import { useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { DaysOpen } from './components/DaysOpen'
 import { useReadConfiguration } from '@/hooks/use-read-configuration'
 import { useForm } from 'react-hook-form'
@@ -33,6 +33,10 @@ export function RestaurantSettings() {
   const [editWorkingHours, setEditWorkingHours] = useState(false)
   const [editWebsite, setEditWebsite] = useState(false)
   const [editCapacity, setEditCapacity] = useState(false)
+
+  React.useEffect(() => {
+    document.title = 'Configurações do restaurante'
+  }, [])
 
   const readConfiguration = useReadConfiguration<IConfigurationModel[]>()
   const configuration = readConfiguration.data?.[0]
@@ -79,7 +83,7 @@ export function RestaurantSettings() {
       </div>
 
       {!readConfiguration.isLoading && (
-        <div className="grid grid-cols-2 gap-10 mt-10">
+        <div className="grid grid-cols-2 gap-10 mt-10 max-sm:grid-cols-1">
           <DaysOpen
             setValue={setValue}
             submit={submit}

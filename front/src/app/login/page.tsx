@@ -18,6 +18,7 @@ import { useNavigate } from 'react-router-dom'
 import { useLogin } from '@/hooks/use-login'
 import { toast } from '@/components/ui/use-toast'
 import { useUser } from '@/context/user-context'
+import React from 'react'
 
 type UserLoginFormData = {
   email: string
@@ -27,6 +28,10 @@ type UserLoginFormData = {
 export const Login = () => {
   const navigate = useNavigate()
   const { executeSetUser } = useUser()
+
+  React.useEffect(() => {
+    document.title = 'Login'
+  }, [])
 
   const {
     register,

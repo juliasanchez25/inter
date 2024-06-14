@@ -31,7 +31,7 @@ type Option = {
   numberOfNotifications?: number
 }
 
-export const Sidebar = () => {
+export const BottomBar = () => {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { user, clearUser } = useUser()
@@ -69,7 +69,7 @@ export const Sidebar = () => {
       role: 'admin',
     },
     {
-      label: 'Reservas',
+      label: 'Minhas Reservas',
       active: pathname.includes('/minhas-reservas'),
       icon: <RocketIcon />,
       path: '/minhas-reservas',
@@ -88,16 +88,13 @@ export const Sidebar = () => {
   })
 
   return (
-    <div className="w-[200px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7 fixed bg-white z-50 max-sm:hidden">
-      <div className="flex flex-col gap-5">
-        <div className="text-md font-semibold text-primary">Reserva Rápida</div>
-      </div>
-      <div className="flex flex-col gap-3 w-full">
+    <div className="w-full h-[60px] shadow-lg flex items-center justify-between px-5 fixed bottom-0 bg-white z-50">
+      <div className="flex items-center gap-3">
         {optionsByRole.map((option) => (
           <Button
             key={option.label}
             variant={option.active ? 'sidebarActive' : 'ghost'}
-            className="flex items-center justify-start gap-4"
+            className="flex items-center justify-center gap-2"
             onClick={() => navigate(option.path)}
           >
             {option.numberOfNotifications ? (
@@ -112,12 +109,12 @@ export const Sidebar = () => {
             ) : (
               option.icon
             )}
-            {option.label}
+            <span className="hidden sm:inline">{option.label}</span>
           </Button>
         ))}
       </div>
-      <div className="flex flex-col gap-6 mt-auto">
-        <Separator />
+      <div className="flex items-center gap-6">
+        <Separator orientation="vertical" />
         {user && (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
@@ -125,7 +122,7 @@ export const Sidebar = () => {
                 <Avatar>
                   <AvatarFallback>{user!.name[0]}</AvatarFallback>
                 </Avatar>
-                <div className="flex flex-col max-w-[80%]">
+                <div className="hidden sm:flex flex-col max-w-[80%]">
                   <p className="text-sm text-ellipsis overflow-hidden whitespace-nowrap">
                     {user!.name}
                   </p>
