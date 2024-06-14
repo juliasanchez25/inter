@@ -6,6 +6,7 @@ namespace InterApi.Controllers
   using InterApi.Data;
   using Microsoft.EntityFrameworkCore;
   using InterApi.Services;
+  using InterApi.Dtos;
 
   [ApiController]
   public class ReservationsController : ControllerBase
@@ -25,9 +26,30 @@ namespace InterApi.Controllers
 
     [HttpGet]
     [Route("/reservations")]
-    public async Task<ActionResult<List<ReservationModel>>> Get()
+    public async Task<ActionResult<List<ReservationDto>>> Get()
     {
-      return await _context.Reservation.ToListAsync();
+      var reservations = await (from reservation in _context.Reservation
+                                join user in _context.User
+                                on reservation.UserId equals user.Id
+                                select new ReservationDto
+                                {
+                                  Id = reservation.Id,
+                                  UserId = reservation.UserId,
+                                  UserName = user.Name,
+                                  Day = reservation.Day,
+                                  Phone = reservation.Phone,
+                                  Quantity = reservation.Quantity
+                                }).ToListAsync();
+
+      return reservations;
+    }
+
+    [HttpGet]
+    [Route("/reservations/me/{userId}")]
+    public async Task<ActionResult<List<ReservationModel>>> Get(int userId)
+    {
+      var reservations = await _context.Reservation.Where(x => x.UserId == userId).ToListAsync();
+      return reservations;
     }
 
     [HttpPost]

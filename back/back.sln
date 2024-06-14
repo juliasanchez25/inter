@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.002.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InterApi", "InterApi.csproj", "{066FAF58-2749-44C1-A450-F053B6F4C9DA}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{066FAF58-2749-44C1-A450-F053B6F4C9DA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{066FAF58-2749-44C1-A450-F053B6F4C9DA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{066FAF58-2749-44C1-A450-F053B6F4C9DA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{066FAF58-2749-44C1-A450-F053B6F4C9DA}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1A76D67F-53EF-4F40-B57C-A987392A20A1}
+	EndGlobalSection
+EndGlobal
