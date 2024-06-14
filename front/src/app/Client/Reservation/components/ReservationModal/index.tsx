@@ -172,7 +172,7 @@ export const ReservationModal = ({ reservation, edit }: Props) => {
           <Button>Fazer reserva</Button>
         )}
       </SheetTrigger>
-      <SheetContent className="md:max-w-[450px]">
+      <SheetContent className="w-full md:max-w-[450px]">
         <form onSubmit={handleSubmit(submit)}>
           <SheetHeader>
             <SheetTitle className="mb-3">Faça sua reserva</SheetTitle>
@@ -224,7 +224,7 @@ export const ReservationModal = ({ reservation, edit }: Props) => {
               {chooseErrorForQuantity()}
             </p>
           </div>
-          <SheetFooter>
+          <SheetFooter className="flex flex-col md:flex-row gap-3">
             <SheetClose asChild>
               <Button variant="outline">Fechar</Button>
             </SheetClose>

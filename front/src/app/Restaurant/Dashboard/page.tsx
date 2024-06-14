@@ -48,7 +48,7 @@ export function Dashboard() {
       <div className="flex flex-col">
         <h2 className="text-xl font-semibold">Reservas</h2>
         <Separator className="mt-4 mb-4" />
-        <div className="flex gap-5 items-center">
+        <div className="flex flex-col md:flex-row md:gap-5 md:items-center">
           <div>
             <label className="block text-xs leading-6 text-gray-600">
               Data inicial
@@ -83,7 +83,7 @@ export function Dashboard() {
           </div>
         </div>
       </div>
-      <Table className="mt-10">
+      <Table className="min-w-[500px] md:w-full mt-10">
         <TableHeader>
           <TableRow>
             <TableHead>Cliente</TableHead>

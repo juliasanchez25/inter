@@ -39,8 +39,8 @@ export const Reservation = () => {
 
   return (
     <PageLayout>
-      <div className="flex justify-between">
-        <div className="flex items-center gap-4">
+      <div className="flex flex-col md:flex-row gap-5 md:justify-between">
+        <div className="flex flex-col md:flex-row items-center gap-4">
           <h2 className="text-xl font-semibold">Minhas reservas</h2>
           <ReservationDatePicker
             error={readReservations.error?.message}
@@ -53,7 +53,7 @@ export const Reservation = () => {
         </div>
         <ReservationModal />
       </div>
-      <Table className="mt-10">
+      <Table className="min-w-[500px] md:w-full mt-10">
         <TableHeader>
           <TableRow>
             <TableHead>Reserva</TableHead>

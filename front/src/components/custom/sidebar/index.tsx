@@ -7,6 +7,7 @@ import {
   GearIcon,
   BellIcon,
   InfoCircledIcon,
+  CountdownTimerIcon,
 } from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback } from '../../ui/avatar'
 import {
@@ -90,7 +91,10 @@ export const Sidebar = () => {
   return (
     <div className="w-[200px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7 fixed bg-white z-50 max-sm:hidden">
       <div className="flex flex-col gap-5">
-        <div className="text-md font-semibold text-primary">Reserva Rápida</div>
+        <div className="flex items-center gap-2 text-md font-semibold text-primary">
+          <CountdownTimerIcon className="w-5 h-5" />
+          Reserva Rápida
+        </div>
       </div>
       <div className="flex flex-col gap-3 w-full">
         {optionsByRole.map((option) => (

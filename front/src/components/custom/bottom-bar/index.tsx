@@ -88,7 +88,7 @@ export const BottomBar = () => {
   })
 
   return (
-    <div className="w-full h-[60px] shadow-lg flex items-center justify-between px-5 fixed bottom-0 bg-white z-50">
+    <div className="w-full h-[60px] shadow-lg border-t border-slate-200 flex items-center justify-between px-5 fixed bottom-0 bg-white z-50 sm:hidden">
       <div className="flex items-center gap-3">
         {optionsByRole.map((option) => (
           <Button

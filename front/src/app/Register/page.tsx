@@ -125,7 +125,7 @@ export const Register = () => {
           </form>
         </CardContent>
         <CardFooter className="flex flex-col space-y-2">
-          <div className="self-start mt-4 text-sm">
+          <div className="self-start text-sm">
             Já possui conta?{' '}
             <a className="underline" href="/login">
               Fazer login

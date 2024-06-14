@@ -78,12 +78,9 @@ export function RestaurantSettings() {
 
   return (
     <PageLayout>
-      <div className="flex justify-between">
-        <h2 className="text-xl font-semibold">Configurações do restaurante</h2>
-      </div>
-
+      <h2 className="text-xl font-semibold">Configurações do restaurante</h2>
       {!readConfiguration.isLoading && (
-        <div className="grid grid-cols-2 gap-10 mt-10 max-sm:grid-cols-1">
+        <div className="mt-6 max-md:grid-cols-1 grid md:grid-cols-2 gap-10">
           <DaysOpen
             setValue={setValue}
             submit={submit}

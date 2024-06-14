@@ -33,10 +33,10 @@ export function NotificationsDisplay() {
 
   return (
     <section>
-      <div className="space-y-5 mt-5 max-h-[500px] overflow-y-auto w-fit pr-2">
+      <div className="space-y-5 mt-5 max-h-[600px] overflow-y-auto w-fit pr-2">
         {readNotifications.data && readNotifications.data.length > 0 ? (
           orderedNotifications!.map((notification) => (
-            <Card className="w-[350px]" key={notification.id}>
+            <Card className="md:w-[350px]" key={notification.id}>
               <CardHeader>
                 <CardTitle className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
