@@ -6,6 +6,7 @@ import { Reservation } from './app/Client/Reservation/page'
 import { Home } from './app/Home/page'
 import { RestaurantSettings } from './app/Restaurant/RestaurantSettings/page'
 import { Notifications } from './app/Restaurant/Notifications/page'
+import { InformationPage } from './app/Client/Information/page'
 
 const router = createBrowserRouter([
   {
@@ -35,6 +36,10 @@ const router = createBrowserRouter([
   {
     path: '/configuracoes',
     element: <RestaurantSettings />,
+  },
+  {
+    path: '/informacoes',
+    element: <InformationPage />,
   },
 ])
 

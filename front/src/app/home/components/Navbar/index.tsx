@@ -13,13 +13,13 @@ export const Navbar = () => {
       </a>
       <nav className="ml-auto flex gap-4 sm:gap-6">
         <a
-          href="#"
+          href="/login"
           className="text-md text-white font-medium hover:underline underline-offset-4"
         >
           Fazer login
         </a>
         <a
-          href="#"
+          href="/cadastro"
           className="text-md text-white font-medium hover:underline underline-offset-4"
         >
           Cadastro

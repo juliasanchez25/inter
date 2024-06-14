@@ -19,6 +19,7 @@ type Props = {
   value: Date | undefined
   setValue: (value: Date | undefined) => void
   disabled?: Matcher | Matcher[]
+  bookedDays?: Matcher | Matcher[]
 }
 
 export function ReservationDatePicker({
@@ -26,6 +27,7 @@ export function ReservationDatePicker({
   value,
   setValue,
   disabled,
+  bookedDays = [],
 }: Props) {
   return (
     <Popover>
@@ -60,6 +62,8 @@ export function ReservationDatePicker({
           initialFocus
           locale={ptBR}
           disabled={disabled}
+          modifiers={{ booked: bookedDays }}
+          modifiersClassNames={{ booked: 'booked' }}
         />
       </PopoverContent>
     </Popover>

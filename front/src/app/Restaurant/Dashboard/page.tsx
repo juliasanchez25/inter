@@ -54,6 +54,9 @@ export function Dashboard() {
               disabled={{
                 after: endDate as Date,
               }}
+              bookedDays={readReservations.data?.map(
+                (reservation) => new Date(reservation.day),
+              )}
             />
           </div>
           <div>
@@ -67,6 +70,9 @@ export function Dashboard() {
               disabled={{
                 before: startDate as Date,
               }}
+              bookedDays={readReservations.data?.map(
+                (reservation) => new Date(reservation.day),
+              )}
             />
           </div>
         </div>
@@ -80,7 +86,7 @@ export function Dashboard() {
             <TableHead>Quantidade de pessoas</TableHead>
           </TableRow>
         </TableHeader>
-        <TableBody>
+        <TableBody className="max-h-[40px] overflow-scroll">
           {readReservations.data &&
             filterReservationByDate(readReservations.data).map(
               (reservation) => (
@@ -88,15 +94,11 @@ export function Dashboard() {
                   <TableCell className="font-medium">
                     {reservation.userName}
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {reservation.phone}
-                  </TableCell>
-                  <TableCell className="font-medium">
+                  <TableCell>{reservation.phone}</TableCell>
+                  <TableCell>
                     {dayjs(reservation.day).format('DD/MM/YYYY')}
                   </TableCell>
-                  <TableCell className="font-medium">
-                    {reservation.quantity}
-                  </TableCell>
+                  <TableCell>{reservation.quantity}</TableCell>
                 </TableRow>
               ),
             )}

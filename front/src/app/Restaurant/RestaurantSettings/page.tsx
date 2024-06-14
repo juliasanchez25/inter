@@ -34,8 +34,8 @@ export function RestaurantSettings() {
   const [editWebsite, setEditWebsite] = useState(false)
   const [editCapacity, setEditCapacity] = useState(false)
 
-  const readConfiguration = useReadConfiguration()
-  const configuration = readConfiguration.data?.[0] as IConfigurationModel
+  const readConfiguration = useReadConfiguration<IConfigurationModel[]>()
+  const configuration = readConfiguration.data?.[0]
 
   const createConfiguration = useCreateConfiguration({
     onSuccess: () => {
@@ -57,6 +57,7 @@ export function RestaurantSettings() {
       setValue('phone', configuration.phone)
       setValue('website', configuration.website)
       setValue('workingHours', configuration.workingHours)
+      setValue('capacity', configuration.capacity)
     }
   }, [configuration])
 

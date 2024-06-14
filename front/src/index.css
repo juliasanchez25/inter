@@ -74,3 +74,20 @@
       @apply bg-background text-foreground;
     }
   }
+
+  .booked {
+    background-color: #fecaca;
+  }
+
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    border-radius: 10px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #f7becd;
+    border-radius: 10px;
+  }

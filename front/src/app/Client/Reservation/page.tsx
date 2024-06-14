@@ -1,5 +1,4 @@
 import { PageLayout } from '@/components/custom/page-layout'
-import { CreateNewReservationModal } from './components/CreateNewReservationModal'
 import {
   Table,
   TableBody,
@@ -14,8 +13,8 @@ import { ReservationDatePicker } from './components/ReservationsDatePicker'
 import { useState } from 'react'
 import { useReadMyReservations } from '@/hooks/use-read-my-reservations'
 import { useUser } from '@/context/user-context'
-import { EditReservation } from './components/EditReservationModal'
 import { DeleteReservation } from './components/DeleteReservationModal'
+import { ReservationModal } from './components/ReservationModal'
 
 export const Reservation = () => {
   const { user } = useUser()
@@ -43,9 +42,12 @@ export const Reservation = () => {
             error={readReservations.error?.message}
             value={date}
             setValue={setDate}
+            bookedDays={readReservations.data?.map(
+              (reservation) => new Date(reservation.day),
+            )}
           />
         </div>
-        <CreateNewReservationModal />
+        <ReservationModal />
       </div>
       <Table className="mt-10">
         <TableHeader>
@@ -70,7 +72,7 @@ export const Reservation = () => {
                   </TableCell>
                   <TableCell>{reservation.quantity}</TableCell>
                   <TableCell>
-                    <EditReservation reservation={reservation} />
+                    <ReservationModal reservation={reservation} edit />
                   </TableCell>
                   <TableCell>
                     <DeleteReservation id={reservation.id} />
@@ -80,7 +82,7 @@ export const Reservation = () => {
             )}
           </TableBody>
         )}
-        {readReservations.data?.length === 0 && (
+        {filterReservationByDate(readReservations.data)?.length === 0 && (
           <TableBody>
             <TableRow>
               <TableCell colSpan={4}>

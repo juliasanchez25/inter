@@ -16,16 +16,17 @@ type Props = {
   defaultValue?: string[]
 }
 
+export const daysOptions = [
+  'Domingo',
+  'Segunda',
+  'Terça',
+  'Quarta',
+  'Quinta',
+  'Sexta',
+  'Sábado',
+]
+
 export function DaysOpen({ setValue, submit, defaultValue }: Props) {
-  const daysOptions = [
-    'Segunda',
-    'Terça',
-    'Quarta',
-    'Quinta',
-    'Sexta',
-    'Sábado',
-    'Domingo',
-  ]
   const [days, setDays] = useState<string[]>(defaultValue || [])
 
   return (

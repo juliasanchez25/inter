@@ -46,9 +46,7 @@ export const Login = () => {
         className: 'bg-emerald-500 text-white',
       })
       executeSetUser(response.user, response.token)
-      navigate(
-        response.user.role === 'admin' ? '/reservas' : '/minhas-reservas',
-      )
+      navigate(response.user.role === 'admin' ? '/reservas' : '/informacoes')
     },
     onError: () => {
       setError('email', {

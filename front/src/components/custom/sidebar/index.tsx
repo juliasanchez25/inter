@@ -6,6 +6,7 @@ import {
   GridIcon,
   GearIcon,
   BellIcon,
+  InfoCircledIcon,
 } from '@radix-ui/react-icons'
 import { Avatar, AvatarFallback } from '../../ui/avatar'
 import {
@@ -33,6 +34,13 @@ export const Sidebar = () => {
   const { user, clearUser } = useUser()
 
   const options: Array<Option> = [
+    {
+      label: 'Informações',
+      active: pathname.includes('/informacoes'),
+      icon: <InfoCircledIcon />,
+      path: '/informacoes',
+      role: 'user',
+    },
     {
       label: 'Reservas',
       active: pathname.includes('/reservas'),
@@ -73,7 +81,7 @@ export const Sidebar = () => {
   })
 
   return (
-    <div className="w-[300px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7">
+    <div className="w-[200px] h-screen shadow-lg flex flex-col gap-10 p-5 pb-7 fixed bg-white z-50">
       <div className="flex flex-col gap-5">
         <div className="text-md font-semibold text-primary">Reserva Rápida</div>
       </div>

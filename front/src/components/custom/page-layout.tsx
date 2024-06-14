@@ -8,9 +8,9 @@ type Props = PropsWithChildren
 export const PageLayout = ({ children }: Props) => {
   return (
     <>
-      <div className="flex gap-5 w-full">
+      <div className="flex w-full">
         <Sidebar />
-        <div className="w-full p-6 pt-10">{children}</div>
+        <div className="w-full p-6 pt-10 ml-[200px]">{children}</div>
       </div>
     </>
   )
